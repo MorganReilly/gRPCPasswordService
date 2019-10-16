@@ -50,16 +50,15 @@ public final class Password {
       "se\022\016\n\006userId\030\001 \001(\005\022\026\n\016hashedPassword\030\002 \001" +
       "(\t\022\014\n\004salt\030\003 \001(\t\"1\n\017ValidateRequest\022\020\n\010p" +
       "assword\030\001 \001(\t\022\014\n\004salt\030\002 \001(\t\")\n\020ValidateR" +
-      "esponse\022\025\n\rvalidPassword\030\001 \001(\0102\300\002\n\017Passw" +
-      "ordService\022F\n\013addPassword\022\033.ie.gmit.ds.P" +
-      "asswordRequest\032\032.google.protobuf.BoolVal" +
-      "ue\022C\n\013getPassword\022\026.google.protobuf.Empt" +
-      "y\032\034.ie.gmit.ds.PasswordResponse\022Q\n\025addPa" +
-      "sswordValidation\022\034.ie.gmit.ds.PasswordRe" +
-      "sponse\032\032.google.protobuf.BoolValue\022M\n\025ge" +
-      "tPasswordValidation\022\026.google.protobuf.Em" +
-      "pty\032\034.ie.gmit.ds.ValidateResponseB\016\n\nie." +
-      "gmit.dsP\001b\006proto3"
+      "esponse\022\025\n\rvalidPassword\030\001 \001(\0102\247\002\n\017Passw" +
+      "ordService\022B\n\007AddHash\022\033.ie.gmit.ds.Passw" +
+      "ordRequest\032\032.google.protobuf.BoolValue\022?" +
+      "\n\007GetHash\022\026.google.protobuf.Empty\032\034.ie.g" +
+      "mit.ds.PasswordResponse\022H\n\rAddValidation" +
+      "\022\033.ie.gmit.ds.ValidateRequest\032\032.google.p" +
+      "rotobuf.BoolValue\022E\n\rGetValidation\022\026.goo" +
+      "gle.protobuf.Empty\032\034.ie.gmit.ds.Validate" +
+      "ResponseB\016\n\nie.gmit.dsP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
