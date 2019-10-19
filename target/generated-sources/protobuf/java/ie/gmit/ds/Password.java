@@ -19,6 +19,11 @@ public final class Password {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ie_gmit_ds_UserInputRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ie_gmit_ds_UserInputResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_ie_gmit_ds_UserInputResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -31,10 +36,12 @@ public final class Password {
       "\n\016password.proto\022\nie.gmit.ds\032\036google/pro" +
       "tobuf/wrappers.proto\032\033google/protobuf/em" +
       "pty.proto\"4\n\020UserInputRequest\022\016\n\006userId\030" +
-      "\001 \001(\005\022\020\n\010password\030\002 \001(\t2S\n\017PasswordServi" +
-      "ce\022@\n\004Hash\022\034.ie.gmit.ds.UserInputRequest" +
-      "\032\032.google.protobuf.BoolValueB\016\n\nie.gmit." +
-      "dsP\001b\006proto3"
+      "\001 \001(\005\022\020\n\010password\030\002 \001(\t\"G\n\021UserInputResp" +
+      "onse\022\016\n\006userId\030\001 \001(\005\022\024\n\014expectedHash\030\002 \001" +
+      "(\t\022\014\n\004salt\030\003 \001(\t2V\n\017PasswordService\022C\n\004H" +
+      "ash\022\034.ie.gmit.ds.UserInputRequest\032\035.ie.g" +
+      "mit.ds.UserInputResponseB\016\n\nie.gmit.dsP\001" +
+      "b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -48,6 +55,12 @@ public final class Password {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ie_gmit_ds_UserInputRequest_descriptor,
         new java.lang.String[] { "UserId", "Password", });
+    internal_static_ie_gmit_ds_UserInputResponse_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_ie_gmit_ds_UserInputResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ie_gmit_ds_UserInputResponse_descriptor,
+        new java.lang.String[] { "UserId", "ExpectedHash", "Salt", });
     com.google.protobuf.WrappersProto.getDescriptor();
     com.google.protobuf.EmptyProto.getDescriptor();
   }

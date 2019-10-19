@@ -28,28 +28,28 @@ public final class PasswordServiceGrpc {
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<ie.gmit.ds.UserInputRequest,
-      com.google.protobuf.BoolValue> getHashMethod;
+      ie.gmit.ds.UserInputResponse> getHashMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "Hash",
       requestType = ie.gmit.ds.UserInputRequest.class,
-      responseType = com.google.protobuf.BoolValue.class,
+      responseType = ie.gmit.ds.UserInputResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<ie.gmit.ds.UserInputRequest,
-      com.google.protobuf.BoolValue> getHashMethod() {
-    io.grpc.MethodDescriptor<ie.gmit.ds.UserInputRequest, com.google.protobuf.BoolValue> getHashMethod;
+      ie.gmit.ds.UserInputResponse> getHashMethod() {
+    io.grpc.MethodDescriptor<ie.gmit.ds.UserInputRequest, ie.gmit.ds.UserInputResponse> getHashMethod;
     if ((getHashMethod = PasswordServiceGrpc.getHashMethod) == null) {
       synchronized (PasswordServiceGrpc.class) {
         if ((getHashMethod = PasswordServiceGrpc.getHashMethod) == null) {
           PasswordServiceGrpc.getHashMethod = getHashMethod =
-              io.grpc.MethodDescriptor.<ie.gmit.ds.UserInputRequest, com.google.protobuf.BoolValue>newBuilder()
+              io.grpc.MethodDescriptor.<ie.gmit.ds.UserInputRequest, ie.gmit.ds.UserInputResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "Hash"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   ie.gmit.ds.UserInputRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.google.protobuf.BoolValue.getDefaultInstance()))
+                  ie.gmit.ds.UserInputResponse.getDefaultInstance()))
               .setSchemaDescriptor(new PasswordServiceMethodDescriptorSupplier("Hash"))
               .build();
         }
@@ -86,12 +86,9 @@ public final class PasswordServiceGrpc {
   public static abstract class PasswordServiceImplBase implements io.grpc.BindableService {
 
     /**
-     * <pre>
-     *    rpc GetHash (google.protobuf.Empty) returns (PasswordResponse);
-     * </pre>
      */
     public void hash(ie.gmit.ds.UserInputRequest request,
-        io.grpc.stub.StreamObserver<com.google.protobuf.BoolValue> responseObserver) {
+        io.grpc.stub.StreamObserver<ie.gmit.ds.UserInputResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getHashMethod(), responseObserver);
     }
 
@@ -102,7 +99,7 @@ public final class PasswordServiceGrpc {
             asyncUnaryCall(
               new MethodHandlers<
                 ie.gmit.ds.UserInputRequest,
-                com.google.protobuf.BoolValue>(
+                ie.gmit.ds.UserInputResponse>(
                   this, METHODID_HASH)))
           .build();
     }
@@ -127,12 +124,9 @@ public final class PasswordServiceGrpc {
     }
 
     /**
-     * <pre>
-     *    rpc GetHash (google.protobuf.Empty) returns (PasswordResponse);
-     * </pre>
      */
     public void hash(ie.gmit.ds.UserInputRequest request,
-        io.grpc.stub.StreamObserver<com.google.protobuf.BoolValue> responseObserver) {
+        io.grpc.stub.StreamObserver<ie.gmit.ds.UserInputResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getHashMethod(), getCallOptions()), request, responseObserver);
     }
@@ -157,11 +151,8 @@ public final class PasswordServiceGrpc {
     }
 
     /**
-     * <pre>
-     *    rpc GetHash (google.protobuf.Empty) returns (PasswordResponse);
-     * </pre>
      */
-    public com.google.protobuf.BoolValue hash(ie.gmit.ds.UserInputRequest request) {
+    public ie.gmit.ds.UserInputResponse hash(ie.gmit.ds.UserInputRequest request) {
       return blockingUnaryCall(
           getChannel(), getHashMethod(), getCallOptions(), request);
     }
@@ -186,11 +177,8 @@ public final class PasswordServiceGrpc {
     }
 
     /**
-     * <pre>
-     *    rpc GetHash (google.protobuf.Empty) returns (PasswordResponse);
-     * </pre>
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.google.protobuf.BoolValue> hash(
+    public com.google.common.util.concurrent.ListenableFuture<ie.gmit.ds.UserInputResponse> hash(
         ie.gmit.ds.UserInputRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getHashMethod(), getCallOptions()), request);
@@ -218,7 +206,7 @@ public final class PasswordServiceGrpc {
       switch (methodId) {
         case METHODID_HASH:
           serviceImpl.hash((ie.gmit.ds.UserInputRequest) request,
-              (io.grpc.stub.StreamObserver<com.google.protobuf.BoolValue>) responseObserver);
+              (io.grpc.stub.StreamObserver<ie.gmit.ds.UserInputResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();

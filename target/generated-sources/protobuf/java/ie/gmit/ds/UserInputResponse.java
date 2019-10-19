@@ -5,29 +5,30 @@ package ie.gmit.ds;
 
 /**
  * <pre>
- * Hash Password - Request
+ * Hash Password - Response
  * </pre>
  *
- * Protobuf type {@code ie.gmit.ds.UserInputRequest}
+ * Protobuf type {@code ie.gmit.ds.UserInputResponse}
  */
-public  final class UserInputRequest extends
+public  final class UserInputResponse extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:ie.gmit.ds.UserInputRequest)
-    UserInputRequestOrBuilder {
+    // @@protoc_insertion_point(message_implements:ie.gmit.ds.UserInputResponse)
+    UserInputResponseOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use UserInputRequest.newBuilder() to construct.
-  private UserInputRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use UserInputResponse.newBuilder() to construct.
+  private UserInputResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private UserInputRequest() {
-    password_ = "";
+  private UserInputResponse() {
+    expectedHash_ = "";
+    salt_ = "";
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new UserInputRequest();
+    return new UserInputResponse();
   }
 
   @java.lang.Override
@@ -35,7 +36,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private UserInputRequest(
+  private UserInputResponse(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -61,7 +62,13 @@ private static final long serialVersionUID = 0L;
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            password_ = s;
+            expectedHash_ = s;
+            break;
+          }
+          case 26: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            salt_ = s;
             break;
           }
           default: {
@@ -85,15 +92,15 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return ie.gmit.ds.Password.internal_static_ie_gmit_ds_UserInputRequest_descriptor;
+    return ie.gmit.ds.Password.internal_static_ie_gmit_ds_UserInputResponse_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return ie.gmit.ds.Password.internal_static_ie_gmit_ds_UserInputRequest_fieldAccessorTable
+    return ie.gmit.ds.Password.internal_static_ie_gmit_ds_UserInputResponse_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            ie.gmit.ds.UserInputRequest.class, ie.gmit.ds.UserInputRequest.Builder.class);
+            ie.gmit.ds.UserInputResponse.class, ie.gmit.ds.UserInputResponse.Builder.class);
   }
 
   public static final int USERID_FIELD_NUMBER = 1;
@@ -105,34 +112,68 @@ private static final long serialVersionUID = 0L;
     return userId_;
   }
 
-  public static final int PASSWORD_FIELD_NUMBER = 2;
-  private volatile java.lang.Object password_;
+  public static final int EXPECTEDHASH_FIELD_NUMBER = 2;
+  private volatile java.lang.Object expectedHash_;
   /**
-   * <code>string password = 2;</code>
+   * <code>string expectedHash = 2;</code>
    */
-  public java.lang.String getPassword() {
-    java.lang.Object ref = password_;
+  public java.lang.String getExpectedHash() {
+    java.lang.Object ref = expectedHash_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      password_ = s;
+      expectedHash_ = s;
       return s;
     }
   }
   /**
-   * <code>string password = 2;</code>
+   * <code>string expectedHash = 2;</code>
    */
   public com.google.protobuf.ByteString
-      getPasswordBytes() {
-    java.lang.Object ref = password_;
+      getExpectedHashBytes() {
+    java.lang.Object ref = expectedHash_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      password_ = b;
+      expectedHash_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int SALT_FIELD_NUMBER = 3;
+  private volatile java.lang.Object salt_;
+  /**
+   * <code>string salt = 3;</code>
+   */
+  public java.lang.String getSalt() {
+    java.lang.Object ref = salt_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      salt_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string salt = 3;</code>
+   */
+  public com.google.protobuf.ByteString
+      getSaltBytes() {
+    java.lang.Object ref = salt_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      salt_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -156,8 +197,11 @@ private static final long serialVersionUID = 0L;
     if (userId_ != 0) {
       output.writeInt32(1, userId_);
     }
-    if (!getPasswordBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, password_);
+    if (!getExpectedHashBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, expectedHash_);
+    }
+    if (!getSaltBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, salt_);
     }
     unknownFields.writeTo(output);
   }
@@ -172,8 +216,11 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(1, userId_);
     }
-    if (!getPasswordBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, password_);
+    if (!getExpectedHashBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, expectedHash_);
+    }
+    if (!getSaltBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, salt_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -185,15 +232,17 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof ie.gmit.ds.UserInputRequest)) {
+    if (!(obj instanceof ie.gmit.ds.UserInputResponse)) {
       return super.equals(obj);
     }
-    ie.gmit.ds.UserInputRequest other = (ie.gmit.ds.UserInputRequest) obj;
+    ie.gmit.ds.UserInputResponse other = (ie.gmit.ds.UserInputResponse) obj;
 
     if (getUserId()
         != other.getUserId()) return false;
-    if (!getPassword()
-        .equals(other.getPassword())) return false;
+    if (!getExpectedHash()
+        .equals(other.getExpectedHash())) return false;
+    if (!getSalt()
+        .equals(other.getSalt())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -207,76 +256,78 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + USERID_FIELD_NUMBER;
     hash = (53 * hash) + getUserId();
-    hash = (37 * hash) + PASSWORD_FIELD_NUMBER;
-    hash = (53 * hash) + getPassword().hashCode();
+    hash = (37 * hash) + EXPECTEDHASH_FIELD_NUMBER;
+    hash = (53 * hash) + getExpectedHash().hashCode();
+    hash = (37 * hash) + SALT_FIELD_NUMBER;
+    hash = (53 * hash) + getSalt().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static ie.gmit.ds.UserInputRequest parseFrom(
+  public static ie.gmit.ds.UserInputResponse parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static ie.gmit.ds.UserInputRequest parseFrom(
+  public static ie.gmit.ds.UserInputResponse parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static ie.gmit.ds.UserInputRequest parseFrom(
+  public static ie.gmit.ds.UserInputResponse parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static ie.gmit.ds.UserInputRequest parseFrom(
+  public static ie.gmit.ds.UserInputResponse parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static ie.gmit.ds.UserInputRequest parseFrom(byte[] data)
+  public static ie.gmit.ds.UserInputResponse parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static ie.gmit.ds.UserInputRequest parseFrom(
+  public static ie.gmit.ds.UserInputResponse parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static ie.gmit.ds.UserInputRequest parseFrom(java.io.InputStream input)
+  public static ie.gmit.ds.UserInputResponse parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static ie.gmit.ds.UserInputRequest parseFrom(
+  public static ie.gmit.ds.UserInputResponse parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static ie.gmit.ds.UserInputRequest parseDelimitedFrom(java.io.InputStream input)
+  public static ie.gmit.ds.UserInputResponse parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static ie.gmit.ds.UserInputRequest parseDelimitedFrom(
+  public static ie.gmit.ds.UserInputResponse parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static ie.gmit.ds.UserInputRequest parseFrom(
+  public static ie.gmit.ds.UserInputResponse parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static ie.gmit.ds.UserInputRequest parseFrom(
+  public static ie.gmit.ds.UserInputResponse parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -289,7 +340,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(ie.gmit.ds.UserInputRequest prototype) {
+  public static Builder newBuilder(ie.gmit.ds.UserInputResponse prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -306,29 +357,29 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
-   * Hash Password - Request
+   * Hash Password - Response
    * </pre>
    *
-   * Protobuf type {@code ie.gmit.ds.UserInputRequest}
+   * Protobuf type {@code ie.gmit.ds.UserInputResponse}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:ie.gmit.ds.UserInputRequest)
-      ie.gmit.ds.UserInputRequestOrBuilder {
+      // @@protoc_insertion_point(builder_implements:ie.gmit.ds.UserInputResponse)
+      ie.gmit.ds.UserInputResponseOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ie.gmit.ds.Password.internal_static_ie_gmit_ds_UserInputRequest_descriptor;
+      return ie.gmit.ds.Password.internal_static_ie_gmit_ds_UserInputResponse_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ie.gmit.ds.Password.internal_static_ie_gmit_ds_UserInputRequest_fieldAccessorTable
+      return ie.gmit.ds.Password.internal_static_ie_gmit_ds_UserInputResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              ie.gmit.ds.UserInputRequest.class, ie.gmit.ds.UserInputRequest.Builder.class);
+              ie.gmit.ds.UserInputResponse.class, ie.gmit.ds.UserInputResponse.Builder.class);
     }
 
-    // Construct using ie.gmit.ds.UserInputRequest.newBuilder()
+    // Construct using ie.gmit.ds.UserInputResponse.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -348,7 +399,9 @@ private static final long serialVersionUID = 0L;
       super.clear();
       userId_ = 0;
 
-      password_ = "";
+      expectedHash_ = "";
+
+      salt_ = "";
 
       return this;
     }
@@ -356,17 +409,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return ie.gmit.ds.Password.internal_static_ie_gmit_ds_UserInputRequest_descriptor;
+      return ie.gmit.ds.Password.internal_static_ie_gmit_ds_UserInputResponse_descriptor;
     }
 
     @java.lang.Override
-    public ie.gmit.ds.UserInputRequest getDefaultInstanceForType() {
-      return ie.gmit.ds.UserInputRequest.getDefaultInstance();
+    public ie.gmit.ds.UserInputResponse getDefaultInstanceForType() {
+      return ie.gmit.ds.UserInputResponse.getDefaultInstance();
     }
 
     @java.lang.Override
-    public ie.gmit.ds.UserInputRequest build() {
-      ie.gmit.ds.UserInputRequest result = buildPartial();
+    public ie.gmit.ds.UserInputResponse build() {
+      ie.gmit.ds.UserInputResponse result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -374,10 +427,11 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public ie.gmit.ds.UserInputRequest buildPartial() {
-      ie.gmit.ds.UserInputRequest result = new ie.gmit.ds.UserInputRequest(this);
+    public ie.gmit.ds.UserInputResponse buildPartial() {
+      ie.gmit.ds.UserInputResponse result = new ie.gmit.ds.UserInputResponse(this);
       result.userId_ = userId_;
-      result.password_ = password_;
+      result.expectedHash_ = expectedHash_;
+      result.salt_ = salt_;
       onBuilt();
       return result;
     }
@@ -416,21 +470,25 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof ie.gmit.ds.UserInputRequest) {
-        return mergeFrom((ie.gmit.ds.UserInputRequest)other);
+      if (other instanceof ie.gmit.ds.UserInputResponse) {
+        return mergeFrom((ie.gmit.ds.UserInputResponse)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(ie.gmit.ds.UserInputRequest other) {
-      if (other == ie.gmit.ds.UserInputRequest.getDefaultInstance()) return this;
+    public Builder mergeFrom(ie.gmit.ds.UserInputResponse other) {
+      if (other == ie.gmit.ds.UserInputResponse.getDefaultInstance()) return this;
       if (other.getUserId() != 0) {
         setUserId(other.getUserId());
       }
-      if (!other.getPassword().isEmpty()) {
-        password_ = other.password_;
+      if (!other.getExpectedHash().isEmpty()) {
+        expectedHash_ = other.expectedHash_;
+        onChanged();
+      }
+      if (!other.getSalt().isEmpty()) {
+        salt_ = other.salt_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -448,11 +506,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      ie.gmit.ds.UserInputRequest parsedMessage = null;
+      ie.gmit.ds.UserInputResponse parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (ie.gmit.ds.UserInputRequest) e.getUnfinishedMessage();
+        parsedMessage = (ie.gmit.ds.UserInputResponse) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -488,71 +546,140 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object password_ = "";
+    private java.lang.Object expectedHash_ = "";
     /**
-     * <code>string password = 2;</code>
+     * <code>string expectedHash = 2;</code>
      */
-    public java.lang.String getPassword() {
-      java.lang.Object ref = password_;
+    public java.lang.String getExpectedHash() {
+      java.lang.Object ref = expectedHash_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        password_ = s;
+        expectedHash_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string password = 2;</code>
+     * <code>string expectedHash = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getPasswordBytes() {
-      java.lang.Object ref = password_;
+        getExpectedHashBytes() {
+      java.lang.Object ref = expectedHash_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        password_ = b;
+        expectedHash_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string password = 2;</code>
+     * <code>string expectedHash = 2;</code>
      */
-    public Builder setPassword(
+    public Builder setExpectedHash(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      password_ = value;
+      expectedHash_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string password = 2;</code>
+     * <code>string expectedHash = 2;</code>
      */
-    public Builder clearPassword() {
+    public Builder clearExpectedHash() {
       
-      password_ = getDefaultInstance().getPassword();
+      expectedHash_ = getDefaultInstance().getExpectedHash();
       onChanged();
       return this;
     }
     /**
-     * <code>string password = 2;</code>
+     * <code>string expectedHash = 2;</code>
      */
-    public Builder setPasswordBytes(
+    public Builder setExpectedHashBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      password_ = value;
+      expectedHash_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object salt_ = "";
+    /**
+     * <code>string salt = 3;</code>
+     */
+    public java.lang.String getSalt() {
+      java.lang.Object ref = salt_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        salt_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string salt = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSaltBytes() {
+      java.lang.Object ref = salt_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        salt_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string salt = 3;</code>
+     */
+    public Builder setSalt(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      salt_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string salt = 3;</code>
+     */
+    public Builder clearSalt() {
+      
+      salt_ = getDefaultInstance().getSalt();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string salt = 3;</code>
+     */
+    public Builder setSaltBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      salt_ = value;
       onChanged();
       return this;
     }
@@ -569,41 +696,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:ie.gmit.ds.UserInputRequest)
+    // @@protoc_insertion_point(builder_scope:ie.gmit.ds.UserInputResponse)
   }
 
-  // @@protoc_insertion_point(class_scope:ie.gmit.ds.UserInputRequest)
-  private static final ie.gmit.ds.UserInputRequest DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:ie.gmit.ds.UserInputResponse)
+  private static final ie.gmit.ds.UserInputResponse DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new ie.gmit.ds.UserInputRequest();
+    DEFAULT_INSTANCE = new ie.gmit.ds.UserInputResponse();
   }
 
-  public static ie.gmit.ds.UserInputRequest getDefaultInstance() {
+  public static ie.gmit.ds.UserInputResponse getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<UserInputRequest>
-      PARSER = new com.google.protobuf.AbstractParser<UserInputRequest>() {
+  private static final com.google.protobuf.Parser<UserInputResponse>
+      PARSER = new com.google.protobuf.AbstractParser<UserInputResponse>() {
     @java.lang.Override
-    public UserInputRequest parsePartialFrom(
+    public UserInputResponse parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new UserInputRequest(input, extensionRegistry);
+      return new UserInputResponse(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<UserInputRequest> parser() {
+  public static com.google.protobuf.Parser<UserInputResponse> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<UserInputRequest> getParserForType() {
+  public com.google.protobuf.Parser<UserInputResponse> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public ie.gmit.ds.UserInputRequest getDefaultInstanceForType() {
+  public ie.gmit.ds.UserInputResponse getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 
