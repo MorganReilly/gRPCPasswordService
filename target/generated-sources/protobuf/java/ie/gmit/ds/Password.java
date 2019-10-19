@@ -24,6 +24,16 @@ public final class Password {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ie_gmit_ds_UserInputResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ie_gmit_ds_PasswordValidateRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_ie_gmit_ds_PasswordValidateRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ie_gmit_ds_PasswordValidateResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_ie_gmit_ds_PasswordValidateResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -38,10 +48,15 @@ public final class Password {
       "pty.proto\"4\n\020UserInputRequest\022\016\n\006userId\030" +
       "\001 \001(\005\022\020\n\010password\030\002 \001(\t\"G\n\021UserInputResp" +
       "onse\022\016\n\006userId\030\001 \001(\005\022\024\n\014expectedHash\030\002 \001" +
-      "(\t\022\014\n\004salt\030\003 \001(\t2V\n\017PasswordService\022C\n\004H" +
-      "ash\022\034.ie.gmit.ds.UserInputRequest\032\035.ie.g" +
-      "mit.ds.UserInputResponseB\016\n\nie.gmit.dsP\001" +
-      "b\006proto3"
+      "(\t\022\014\n\004salt\030\003 \001(\t\"9\n\027PasswordValidateRequ" +
+      "est\022\020\n\010password\030\001 \001(\t\022\014\n\004salt\030\002 \001(\t\"1\n\030P" +
+      "asswordValidateResponse\022\025\n\rvalidPassword" +
+      "\030\001 \001(\0102\255\001\n\017PasswordService\022C\n\004Hash\022\034.ie." +
+      "gmit.ds.UserInputRequest\032\035.ie.gmit.ds.Us" +
+      "erInputResponse\022U\n\010Validate\022#.ie.gmit.ds" +
+      ".PasswordValidateRequest\032$.ie.gmit.ds.Pa" +
+      "sswordValidateResponseB\016\n\nie.gmit.dsP\001b\006" +
+      "proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -61,6 +76,18 @@ public final class Password {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ie_gmit_ds_UserInputResponse_descriptor,
         new java.lang.String[] { "UserId", "ExpectedHash", "Salt", });
+    internal_static_ie_gmit_ds_PasswordValidateRequest_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_ie_gmit_ds_PasswordValidateRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ie_gmit_ds_PasswordValidateRequest_descriptor,
+        new java.lang.String[] { "Password", "Salt", });
+    internal_static_ie_gmit_ds_PasswordValidateResponse_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_ie_gmit_ds_PasswordValidateResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ie_gmit_ds_PasswordValidateResponse_descriptor,
+        new java.lang.String[] { "ValidPassword", });
     com.google.protobuf.WrappersProto.getDescriptor();
     com.google.protobuf.EmptyProto.getDescriptor();
   }

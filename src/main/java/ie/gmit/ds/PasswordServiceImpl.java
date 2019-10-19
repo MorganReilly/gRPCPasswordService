@@ -18,6 +18,8 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
     private char[] charPassword; // Use for converting String password from request
     private byte[] expectedHash; // Use for params in isExpectedPassword()
 
+    private boolean isValidPassword; // Use for checking if password is valid or not
+
     /**
      * Store userid to return in response
      */
@@ -77,9 +79,28 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
             responseObserver.onNext(response);
         } catch (RuntimeException ex) {
             System.out.println(ex);
-            logger.info("Error thrown in PasswordServiceImpl: " + ex);
+            logger.info("Error thrown in hash: " + ex);
         }
         // Commit to client
         responseObserver.onCompleted();
     }
+
+//    @Override
+//    public void validate(PasswordValidateRequest request, StreamObserver<PasswordValidateResponse> responseObserver) {
+//        System.out.println(request);
+//        try {
+//            // Get password
+//            isValidPassword = Passwords.isExpectedPassword(charPassword, salt, expectedHash);
+//            System.out.println("valid password: " + isValidPassword);
+//            logger.info("Valid password: " + isValidPassword);
+//
+//            // Create response
+//            PasswordValidateResponse
+//        } catch (RuntimeException ex) {
+//            System.out.println(ex);
+//            logger.info("Error thrown in validate: " + ex);
+//        }
+//        // Commit to client
+//        responseObserver.onCompleted();
+//    }
 }

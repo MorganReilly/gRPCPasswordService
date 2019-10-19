@@ -13,8 +13,8 @@ public class PasswordClient {
 //     */
 //    private static final Logger logger = Logger.getLogger(PasswordClient.class.getName());
 //    private final ManagedChannel channel;
-//    private final PasswordServiceGrpc.PasswordServiceStub asyncPasswordService;
 //    private final PasswordServiceGrpc.PasswordServiceBlockingStub syncPasswordService;
+//
 //
 //    /**
 //     * Constructor
@@ -25,8 +25,8 @@ public class PasswordClient {
 //    public PasswordClient(String host, int port) {
 //        channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();
 //        syncPasswordService = PasswordServiceGrpc.newBlockingStub(channel);
-//        asyncPasswordService = PasswordServiceGrpc.newStub(channel);
 //    }
+////
 //
 //    /**
 //     * Client shutdown
@@ -36,6 +36,15 @@ public class PasswordClient {
 //    public void shutdown() throws InterruptedException {
 //        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
 //    }
+//
+//    /**
+//     * Client Stubs
+//     * Synchronous call
+//     */
+//    public void hashNewPassword(UserInputRequest userInputRequest) {
+//        System.out.println(user);
+//    }
+
     private static final String HOST = "localhost";
     private static final int PORT = 50551;
 
@@ -46,31 +55,38 @@ public class PasswordClient {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
-        // Create a channel
+        /**
+         * Step 1 -- Create a channel
+         */
         ManagedChannel channel = ManagedChannelBuilder
                 .forAddress(HOST, PORT)
                 .usePlaintext() // using http, use https in future
                 .build();
 
-        // Create a blocking stub with the channel
+        /**
+         * Step 2 -- Create a blocking stub with the channel
+         */
         PasswordServiceGrpc.PasswordServiceBlockingStub syncPasswordService =
                 PasswordServiceGrpc.newBlockingStub(channel);
 
-        // Create request
+        /**
+         * Step 3 -- Create Request
+         */
         UserInputRequest userInputRequest = UserInputRequest.newBuilder()
                 .setUserId(001)
                 .setPassword("password")
                 .build();
 
-        // Send request using the stub
-        System.out.println("Sending Request");
+        /**
+         * Step 4 -- Send request using the stub
+         */
         UserInputResponse userInputResponse = syncPasswordService.hash(userInputRequest);
+        System.out.println("Sending Request: \n" + userInputRequest);
+        System.out.println("Received response: \n" + userInputResponse);
 
-        System.out.println("Received response: " +
-                " hash: " + userInputResponse.getExpectedHash() +
-                " salt: " + userInputResponse.getSalt() +
-                " userID: " + userInputResponse.getUserId());
-
+        /**
+         * Step 5 -- Shutdown channel
+         */
         channel.shutdown();
     }
 }

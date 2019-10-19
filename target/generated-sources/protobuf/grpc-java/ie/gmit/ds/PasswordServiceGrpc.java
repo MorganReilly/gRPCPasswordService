@@ -58,6 +58,37 @@ public final class PasswordServiceGrpc {
     return getHashMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<ie.gmit.ds.PasswordValidateRequest,
+      ie.gmit.ds.PasswordValidateResponse> getValidateMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "Validate",
+      requestType = ie.gmit.ds.PasswordValidateRequest.class,
+      responseType = ie.gmit.ds.PasswordValidateResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<ie.gmit.ds.PasswordValidateRequest,
+      ie.gmit.ds.PasswordValidateResponse> getValidateMethod() {
+    io.grpc.MethodDescriptor<ie.gmit.ds.PasswordValidateRequest, ie.gmit.ds.PasswordValidateResponse> getValidateMethod;
+    if ((getValidateMethod = PasswordServiceGrpc.getValidateMethod) == null) {
+      synchronized (PasswordServiceGrpc.class) {
+        if ((getValidateMethod = PasswordServiceGrpc.getValidateMethod) == null) {
+          PasswordServiceGrpc.getValidateMethod = getValidateMethod =
+              io.grpc.MethodDescriptor.<ie.gmit.ds.PasswordValidateRequest, ie.gmit.ds.PasswordValidateResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "Validate"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  ie.gmit.ds.PasswordValidateRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  ie.gmit.ds.PasswordValidateResponse.getDefaultInstance()))
+              .setSchemaDescriptor(new PasswordServiceMethodDescriptorSupplier("Validate"))
+              .build();
+        }
+      }
+    }
+    return getValidateMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -92,6 +123,13 @@ public final class PasswordServiceGrpc {
       asyncUnimplementedUnaryCall(getHashMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void validate(ie.gmit.ds.PasswordValidateRequest request,
+        io.grpc.stub.StreamObserver<ie.gmit.ds.PasswordValidateResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getValidateMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -101,6 +139,13 @@ public final class PasswordServiceGrpc {
                 ie.gmit.ds.UserInputRequest,
                 ie.gmit.ds.UserInputResponse>(
                   this, METHODID_HASH)))
+          .addMethod(
+            getValidateMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                ie.gmit.ds.PasswordValidateRequest,
+                ie.gmit.ds.PasswordValidateResponse>(
+                  this, METHODID_VALIDATE)))
           .build();
     }
   }
@@ -130,6 +175,14 @@ public final class PasswordServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(getHashMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void validate(ie.gmit.ds.PasswordValidateRequest request,
+        io.grpc.stub.StreamObserver<ie.gmit.ds.PasswordValidateResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getValidateMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -155,6 +208,13 @@ public final class PasswordServiceGrpc {
     public ie.gmit.ds.UserInputResponse hash(ie.gmit.ds.UserInputRequest request) {
       return blockingUnaryCall(
           getChannel(), getHashMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public ie.gmit.ds.PasswordValidateResponse validate(ie.gmit.ds.PasswordValidateRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getValidateMethod(), getCallOptions(), request);
     }
   }
 
@@ -183,9 +243,18 @@ public final class PasswordServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(getHashMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<ie.gmit.ds.PasswordValidateResponse> validate(
+        ie.gmit.ds.PasswordValidateRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getValidateMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_HASH = 0;
+  private static final int METHODID_VALIDATE = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -207,6 +276,10 @@ public final class PasswordServiceGrpc {
         case METHODID_HASH:
           serviceImpl.hash((ie.gmit.ds.UserInputRequest) request,
               (io.grpc.stub.StreamObserver<ie.gmit.ds.UserInputResponse>) responseObserver);
+          break;
+        case METHODID_VALIDATE:
+          serviceImpl.validate((ie.gmit.ds.PasswordValidateRequest) request,
+              (io.grpc.stub.StreamObserver<ie.gmit.ds.PasswordValidateResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -270,6 +343,7 @@ public final class PasswordServiceGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new PasswordServiceFileDescriptorSupplier())
               .addMethod(getHashMethod())
+              .addMethod(getValidateMethod())
               .build();
         }
       }
