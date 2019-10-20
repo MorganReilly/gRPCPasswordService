@@ -70,13 +70,13 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
              * Sending back: userId, expectedHash, salt
              */
             // Creating response
-            UserInputResponse response = UserInputResponse.newBuilder()
+            UserInputResponse userInputResponse = UserInputResponse.newBuilder()
                     .setUserId(userId)
                     .setExpectedHash(expectedHash.toString())
                     .setSalt(salt.toString())
                     .build();
             // Send to client
-            responseObserver.onNext(response);
+            responseObserver.onNext(userInputResponse);
         } catch (RuntimeException ex) {
             System.out.println(ex);
             logger.info("Error thrown in hash: " + ex);
@@ -85,22 +85,42 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
         responseObserver.onCompleted();
     }
 
-//    @Override
-//    public void validate(PasswordValidateRequest request, StreamObserver<PasswordValidateResponse> responseObserver) {
-//        System.out.println(request);
-//        try {
-//            // Get password
-//            isValidPassword = Passwords.isExpectedPassword(charPassword, salt, expectedHash);
-//            System.out.println("valid password: " + isValidPassword);
-//            logger.info("Valid password: " + isValidPassword);
-//
-//            // Create response
-//            PasswordValidateResponse
-//        } catch (RuntimeException ex) {
-//            System.out.println(ex);
-//            logger.info("Error thrown in validate: " + ex);
-//        }
-//        // Commit to client
-//        responseObserver.onCompleted();
-//    }
+    @Override
+    public void validate(PasswordValidateRequest request, StreamObserver<PasswordValidateResponse> responseObserver) {
+        System.out.println(request);
+        try {
+            /**
+             * Request from user and run through validation function
+             */
+            // Get password
+            charPassword = request.getPassword().toCharArray();
+            System.out.println("charPassword: " + charPassword);
+            logger.info("charPassword: " + charPassword);
+
+            // TODO:  Get salt -- do with or without request?
+            salt = request.getSalt().getBytes();
+            System.out.println("Created Salt: " + salt);
+            logger.info("Created Salt: " + salt);
+
+            isValidPassword = Passwords.isExpectedPassword(charPassword, salt, expectedHash);
+            System.out.println("valid password: " + isValidPassword);
+            logger.info("Valid password: " + isValidPassword);
+
+            /**
+             * Creating response to user
+             * Sending back: isValidPassword
+             */
+            // Creating response
+            PasswordValidateResponse passwordValidateResponse = PasswordValidateResponse.newBuilder()
+                    .setValidPassword(isValidPassword)
+                    .build();
+            // Send to client
+            responseObserver.onNext(passwordValidateResponse);
+        } catch (RuntimeException ex) {
+            System.out.println(ex);
+            logger.info("Error thrown in validate: " + ex);
+        }
+        // Commit to client
+        responseObserver.onCompleted();
+    }
 }

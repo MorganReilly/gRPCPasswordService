@@ -85,6 +85,28 @@ public class PasswordClient {
         System.out.println("Received response: \n" + userInputResponse);
 
         /**
+         * Store: password (char[]), salt (byte[]), expectedHash (byte[])
+         */
+        char[] passwordFromRequest = userInputRequest.getPassword().toCharArray();
+        byte[] saltFromResponse = userInputResponse.getSalt().getBytes();
+        byte[] expectedHashFromResponse = userInputResponse.getExpectedHash().getBytes();
+
+        /**
+         * Step 3 -- Repeat for validation -- Create request
+         */
+        PasswordValidateRequest passwordValidateRequest = PasswordValidateRequest.newBuilder()
+                .setPassword(passwordFromRequest.toString())
+                .setSalt(saltFromResponse.toString())
+                .build();
+
+        /**
+         * Step 4 -- Repeat for validation -- Send request using the stub
+         */
+        PasswordValidateResponse passwordValidateResponse = syncPasswordService.validate(passwordValidateRequest);
+        System.out.println("Sending Request: \n" + passwordValidateRequest);
+        System.out.println("Received response: \n" + passwordValidateResponse);
+
+        /**
          * Step 5 -- Shutdown channel
          */
         channel.shutdown();
