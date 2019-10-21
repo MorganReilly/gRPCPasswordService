@@ -47,22 +47,22 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
              */
             // Get userID
             userId = request.getUserId();
-            System.out.println("UserID: " + userId);
+//            System.out.println("UserID: " + userId);
             logger.info("UserID: " + userId);
 
             // Create Salt
             salt = Passwords.getNextSalt();
-            System.out.println("Created Salt: " + salt);
+//            System.out.println("Created Salt: " + salt);
             logger.info("Created Salt: " + salt);
 
             // Convert user password into char array
             charPassword = request.getPassword().toCharArray();
-            System.out.println("charPassword: " + charPassword);
+//            System.out.println("charPassword: " + charPassword);
             logger.info("charPassword: " + charPassword);
 
             // Hash password with salt
             expectedHash = Passwords.hash(charPassword, salt);
-            System.out.println("expectedHash: " + expectedHash);
+//            System.out.println("expectedHash: " + expectedHash);
             logger.info("expectedHash: " + expectedHash);
 
             /**
@@ -78,7 +78,7 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
             // Send to client
             responseObserver.onNext(userInputResponse);
         } catch (RuntimeException ex) {
-            System.out.println(ex);
+//            System.out.println(ex);
             logger.info("Error thrown in hash: " + ex);
         }
         // Commit to client
@@ -94,16 +94,22 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
              */
             // Get password
             charPassword = request.getPassword().toCharArray();
-            System.out.println("charPassword: " + charPassword);
+//            System.out.println("charPassword: " + charPassword);
             logger.info("charPassword: " + charPassword);
 
-            // TODO:  Get salt -- do with or without request?
+            // Get Salt
             salt = request.getSalt().getBytes();
-            System.out.println("Created Salt: " + salt);
+//            System.out.println("Created Salt: " + salt);
             logger.info("Created Salt: " + salt);
 
+            // Hash password with salt
+            expectedHash = Passwords.hash(charPassword, salt);
+//            System.out.println("expectedHash: " + expectedHash);
+            logger.info("expectedHash: " + expectedHash);
+
+            // Check if the password is valid or not
             isValidPassword = Passwords.isExpectedPassword(charPassword, salt, expectedHash);
-            System.out.println("valid password: " + isValidPassword);
+//            System.out.println("valid password: " + isValidPassword);
             logger.info("Valid password: " + isValidPassword);
 
             /**

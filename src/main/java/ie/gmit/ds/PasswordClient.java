@@ -85,11 +85,14 @@ public class PasswordClient {
         System.out.println("Received response: \n" + userInputResponse);
 
         /**
+         * Retrieve from previous response from user in oder to validate password
+         *
          * Store: password (char[]), salt (byte[]), expectedHash (byte[])
+         *
+         * TODO: Find out if you call Passwords class here or do as done below
          */
         char[] passwordFromRequest = userInputRequest.getPassword().toCharArray();
         byte[] saltFromResponse = userInputResponse.getSalt().getBytes();
-        byte[] expectedHashFromResponse = userInputResponse.getExpectedHash().getBytes();
 
         /**
          * Step 3 -- Repeat for validation -- Create request
