@@ -64,13 +64,13 @@ public class PasswordClient {
                 .forAddress(HOST, PORT)
                 .usePlaintext() // using http, use https in future
                 .build();
-//
+
         /**
          * Step 2 -- Create a blocking stub with the channel
          */
         PasswordServiceGrpc.PasswordServiceBlockingStub syncPasswordService =
                 PasswordServiceGrpc.newBlockingStub(channel);
-//
+
         /**
          * Step 3 -- Create Request
          */
@@ -78,7 +78,7 @@ public class PasswordClient {
                 .setUserId(001)
                 .setPassword(randomPassword)
                 .build();
-//
+
         /**
          * Step 4 -- Send request using the stub
          */
@@ -90,20 +90,15 @@ public class PasswordClient {
          * Retrieve from previous response from user in oder to validate password
          *
          * Store: password (char[]), salt (byte[]), expectedHash (byte[])
-         *
-         * TODO: Find out if you call Passwords class here or do as done below
          */
-        byte[] saltFromRes; // Use for storing salt from previous response
-        byte[] expectedHashFromRes; // Use for storing hash from previous response
-
-        saltFromRes = userInputResponse.getSalt().toByteArray();
-        expectedHashFromRes = userInputResponse.getExpectedHash().toByteArray();
+        byte[] saltFromRes = userInputResponse.getSalt().toByteArray();; // Use for storing salt from previous response
+        byte[] expectedHashFromRes = userInputResponse.getExpectedHash().toByteArray();; // Use for storing hash from previous response
 
         /**
          * Step 3 -- Repeat for validation -- Create request
          */
         PasswordValidateRequest passwordValidateRequest = PasswordValidateRequest.newBuilder()
-                .setPassword("asd")
+                .setPassword(randomPassword)
                 .setSalt(ByteString.copyFrom(saltFromRes))
                 .setExpectedHash(ByteString.copyFrom(expectedHashFromRes))
                 .build();
