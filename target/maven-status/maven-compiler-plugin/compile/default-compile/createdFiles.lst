@@ -8,6 +8,7 @@ ie/gmit/ds/PasswordServiceGrpc$PasswordServiceImplBase.class
 ie/gmit/ds/PasswordServiceGrpc$PasswordServiceBaseDescriptorSupplier.class
 ie/gmit/ds/PasswordValidateResponse.class
 ie/gmit/ds/UserInputRequestOrBuilder.class
+ie/gmit/ds/PasswordServer.class
 ie/gmit/ds/PasswordServiceGrpc$PasswordServiceStub.class
 ie/gmit/ds/Passwords.class
 ie/gmit/ds/PasswordServiceGrpc$MethodHandlers.class
@@ -15,6 +16,7 @@ ie/gmit/ds/PasswordValidateRequestOrBuilder.class
 ie/gmit/ds/PasswordServiceGrpc.class
 ie/gmit/ds/PasswordServiceGrpc$PasswordServiceBlockingStub.class
 ie/gmit/ds/UserInputResponseOrBuilder.class
+ie/gmit/ds/PasswordClient.class
 ie/gmit/ds/PasswordServiceGrpc$PasswordServiceMethodDescriptorSupplier.class
 ie/gmit/ds/PasswordValidateRequest.class
 ie/gmit/ds/UserInputRequest.class

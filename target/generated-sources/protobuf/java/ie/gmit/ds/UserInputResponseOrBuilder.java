@@ -13,22 +13,12 @@ public interface UserInputResponseOrBuilder extends
   int getUserId();
 
   /**
-   * <code>string expectedHash = 2;</code>
+   * <code>bytes expectedHash = 2;</code>
    */
-  java.lang.String getExpectedHash();
-  /**
-   * <code>string expectedHash = 2;</code>
-   */
-  com.google.protobuf.ByteString
-      getExpectedHashBytes();
+  com.google.protobuf.ByteString getExpectedHash();
 
   /**
-   * <code>string salt = 3;</code>
+   * <code>bytes salt = 3;</code>
    */
-  java.lang.String getSalt();
-  /**
-   * <code>string salt = 3;</code>
-   */
-  com.google.protobuf.ByteString
-      getSaltBytes();
+  com.google.protobuf.ByteString getSalt();
 }

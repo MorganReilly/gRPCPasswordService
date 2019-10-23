@@ -1,11 +1,11 @@
 package ie.gmit.ds;
 
+import com.google.protobuf.ByteString;
 import io.grpc.stub.StreamObserver;
 
 import java.util.logging.Logger;
 
 public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImplBase {
-
     private static final Logger logger = Logger.getLogger(PasswordServiceImpl.class.getName());
 
     /**
@@ -14,14 +14,12 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
      * hashing
      * salting
      */
-    private byte[] salt; // Use for return value: getNextSalt()
     private char[] charPassword; // Use for converting String password from request
+    private byte[] salt; // Use for return value: getNextSalt()
     private byte[] expectedHash; // Use for params in isExpectedPassword()
 
-    private boolean isValidPassword; // Use for checking if password is valid or not
-
     /**
-     * Store userid to return in response
+     * Store userId to return in response
      */
     private int userId;
 
@@ -32,14 +30,15 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
     }
 
     /**
-     * rpc hash from PasswordService
+     * rpc - hash
      *
      * @param request
      * @param responseObserver
      */
     @Override
     public void hash(UserInputRequest request, StreamObserver<UserInputResponse> responseObserver) {
-        System.out.println(request);
+        System.out.println(request); // Print the request
+//        logger.info("Hash Request: " + request);
 
         try {
             /**
@@ -47,33 +46,30 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
              */
             // Get userID
             userId = request.getUserId();
-//            System.out.println("UserID: " + userId);
-            logger.info("UserID: " + userId);
+            System.out.println("UserID: " + userId);
 
             // Create Salt
             salt = Passwords.getNextSalt();
-//            System.out.println("Created Salt: " + salt);
-            logger.info("Created Salt: " + salt);
+            System.out.println("Salt: " + salt);
 
             // Convert user password into char array
             charPassword = request.getPassword().toCharArray();
-//            System.out.println("charPassword: " + charPassword);
-            logger.info("charPassword: " + charPassword);
+            System.out.println("Password: " + charPassword);
 
             // Hash password with salt
             expectedHash = Passwords.hash(charPassword, salt);
-//            System.out.println("expectedHash: " + expectedHash);
-            logger.info("expectedHash: " + expectedHash);
+            System.out.println("Expected Hash: " + expectedHash);
 
             /**
              * Creating response to user
+             *
              * Sending back: userId, expectedHash, salt
              */
             // Creating response
             UserInputResponse userInputResponse = UserInputResponse.newBuilder()
                     .setUserId(userId)
-                    .setExpectedHash(expectedHash.toString())
-                    .setSalt(salt.toString())
+                    .setSalt(ByteString.copyFrom(salt))
+                    .setExpectedHash(ByteString.copyFrom(expectedHash))
                     .build();
             // Send to client
             responseObserver.onNext(userInputResponse);
@@ -85,41 +81,44 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
         responseObserver.onCompleted();
     }
 
+    /**
+     * rpc - validate password
+     *
+     * @param request
+     * @param responseObserver
+     */
     @Override
     public void validate(PasswordValidateRequest request, StreamObserver<PasswordValidateResponse> responseObserver) {
+
+        boolean isValidPassword; // Use for checking if password is valid or not
         System.out.println(request);
+
         try {
             /**
              * Request from user and run through validation function
              */
             // Get password
             charPassword = request.getPassword().toCharArray();
-//            System.out.println("charPassword: " + charPassword);
-            logger.info("charPassword: " + charPassword);
-
-            // Get Salt
-            salt = request.getSalt().getBytes();
-//            System.out.println("Created Salt: " + salt);
-            logger.info("Created Salt: " + salt);
-
-            // Hash password with salt
-            expectedHash = Passwords.hash(charPassword, salt);
-//            System.out.println("expectedHash: " + expectedHash);
-            logger.info("expectedHash: " + expectedHash);
+            System.out.println("Password: " + charPassword);
+            // Get salt
+            salt = request.getSalt().toByteArray();
+            System.out.println("Salt: " + salt);
+            // Get expectedHash
+            expectedHash = request.getExpectedHash().toByteArray();
+            System.out.println("Expected Hash: " + expectedHash);
 
             // Check if the password is valid or not
             isValidPassword = Passwords.isExpectedPassword(charPassword, salt, expectedHash);
-//            System.out.println("valid password: " + isValidPassword);
-            logger.info("Valid password: " + isValidPassword);
+            System.out.println("Is Valid Password: " + isValidPassword);
 
             /**
              * Creating response to user
              * Sending back: isValidPassword
              */
-            // Creating response
             PasswordValidateResponse passwordValidateResponse = PasswordValidateResponse.newBuilder()
                     .setValidPassword(isValidPassword)
                     .build();
+
             // Send to client
             responseObserver.onNext(passwordValidateResponse);
         } catch (RuntimeException ex) {

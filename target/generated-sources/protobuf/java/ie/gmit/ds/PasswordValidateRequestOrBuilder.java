@@ -18,12 +18,12 @@ public interface PasswordValidateRequestOrBuilder extends
       getPasswordBytes();
 
   /**
-   * <code>string salt = 2;</code>
+   * <code>bytes expectedHash = 2;</code>
    */
-  java.lang.String getSalt();
+  com.google.protobuf.ByteString getExpectedHash();
+
   /**
-   * <code>string salt = 2;</code>
+   * <code>bytes salt = 3;</code>
    */
-  com.google.protobuf.ByteString
-      getSaltBytes();
+  com.google.protobuf.ByteString getSalt();
 }

@@ -1,5 +1,7 @@
 package ie.gmit.ds;
 
+import com.google.protobuf.ByteString;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -13,8 +15,7 @@ import java.util.Random;
  * salt. The algorithm used is PBKDF2WithHmacSHA1 which, although not the best for hashing password (vs. bcrypt) is
  * still considered robust and <a href="https://security.stackexchange.com/a/6415/12614"> recommended by NIST </a>.
  * The hashed value has 256 bits.
- * Adapted from https://stackoverflow.com/questions/18142745/how-do-i-generate-a-salt-in-java-for-salted-hash
- * Referenced from https://gist.github.com/john-french/9c94d88f34b2a4ccbe55af6afb083674
+ * Adapted from <a href="https://stackoverflow.com/questions/18142745/how-do-i-generate-a-salt-in-java-for-salted-hash">
  */
 public class Passwords {
 
@@ -91,7 +92,6 @@ public class Passwords {
         }
         return sb.toString();
     }
-
     /**
      * Understanding how this class works by using main
      *
@@ -119,5 +119,7 @@ public class Passwords {
         String newRandomPassword = generateRandomPassword(10);
         isValid = isExpectedPassword(newRandomPassword.toCharArray(), salt, hashedPassword);
         System.out.println("Is valid: " + isValid);
+
+        System.out.println(ByteString.copyFrom(salt));
     }
 }

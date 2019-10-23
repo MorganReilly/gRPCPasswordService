@@ -1,5 +1,6 @@
 package ie.gmit.ds;
 
+import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -55,6 +56,7 @@ public class PasswordClient {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
+        String randomPassword = Passwords.generateRandomPassword(6);
         /**
          * Step 1 -- Create a channel
          */
@@ -62,21 +64,21 @@ public class PasswordClient {
                 .forAddress(HOST, PORT)
                 .usePlaintext() // using http, use https in future
                 .build();
-
+//
         /**
          * Step 2 -- Create a blocking stub with the channel
          */
         PasswordServiceGrpc.PasswordServiceBlockingStub syncPasswordService =
                 PasswordServiceGrpc.newBlockingStub(channel);
-
+//
         /**
          * Step 3 -- Create Request
          */
         UserInputRequest userInputRequest = UserInputRequest.newBuilder()
                 .setUserId(001)
-                .setPassword("password")
+                .setPassword(randomPassword)
                 .build();
-
+//
         /**
          * Step 4 -- Send request using the stub
          */
@@ -91,15 +93,19 @@ public class PasswordClient {
          *
          * TODO: Find out if you call Passwords class here or do as done below
          */
-        char[] passwordFromRequest = userInputRequest.getPassword().toCharArray();
-        byte[] saltFromResponse = userInputResponse.getSalt().getBytes();
+        byte[] saltFromRes; // Use for storing salt from previous response
+        byte[] expectedHashFromRes; // Use for storing hash from previous response
+
+        saltFromRes = userInputResponse.getSalt().toByteArray();
+        expectedHashFromRes = userInputResponse.getExpectedHash().toByteArray();
 
         /**
          * Step 3 -- Repeat for validation -- Create request
          */
         PasswordValidateRequest passwordValidateRequest = PasswordValidateRequest.newBuilder()
-                .setPassword(passwordFromRequest.toString())
-                .setSalt(saltFromResponse.toString())
+                .setPassword("asd")
+                .setSalt(ByteString.copyFrom(saltFromRes))
+                .setExpectedHash(ByteString.copyFrom(expectedHashFromRes))
                 .build();
 
         /**
