@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImplBase {
     private static final Logger logger = Logger.getLogger(PasswordServiceImpl.class.getName());
-
     /**
      * Variables for:
      * checking password
@@ -31,35 +30,27 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
     }
 
     /**
-     * rpc - hash
+     * rpc - Hash
      *
      * @param request
      * @param responseObserver
      */
     @Override
     public void hash(UserInputRequest request, StreamObserver<UserInputResponse> responseObserver) {
-        logger.info("Hash Request: " + request);
-
+        // Logging request
+        logger.info("Hash Request\nUserId: " + request.getUserId() + "\nPassword: " + request.getPassword());
         try {
             /**
              * Request from user and run through hashing function
              */
             // Get userID
             userId = request.getUserId();
-            logger.info("userId: " + userId);
-
             // Create Salt
             salt = Passwords.getNextSalt();
-            logger.info("salt" + salt);
-
             // Convert user password into char array
             charPassword = request.getPassword().toCharArray();
-            logger.info("password: " + charPassword);
-
             // Hash password with salt
             expectedHash = Passwords.hash(charPassword, salt);
-            logger.info("expectedHash: " + expectedHash);
-
             /**
              * Creating response to user
              * Using ByteString.copyFrom in order to convert a byte[] --> ByteString
@@ -72,41 +63,43 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
                     .setSalt(ByteString.copyFrom(salt))
                     .setExpectedHash(ByteString.copyFrom(expectedHash))
                     .build();
+            // Logging response
+            logger.info("Hash Response\nUserId: " + userInputResponse.getUserId()
+                    + "\nSalt: " + userInputResponse.getSalt()
+                    + "\nHashed Password: " + userInputResponse.getExpectedHash());
             // Send to client
             responseObserver.onNext(userInputResponse);
         } catch (RuntimeException ex) {
-            logger.warning("Error thrown in hash: " + ex);
+            logger.warning("Error thrown in Hash: " + ex);
         }
         // Commit to client
         responseObserver.onCompleted();
     }
 
     /**
-     * rpc - validate password
+     * rpc - Validate
      *
      * @param request
      * @param responseObserver
      */
     @Override
     public void validate(PasswordValidateRequest request, StreamObserver<PasswordValidateResponse> responseObserver) {
-        logger.info("Validate Request: " + request);
+        // Logging request
+        logger.info("Validate Request\nPassword: " + request.getPassword()
+                + "\nSalt: " + request.getSalt()
+                + "\nHashed Password: " + request.getPassword());
         try {
             /**
              * Request from user and run through validation function
              */
             // Get password
             charPassword = request.getPassword().toCharArray();
-            logger.info("Password: " + charPassword);
             // Get salt
             salt = request.getSalt().toByteArray();
-            logger.info("Salt: " + salt);
             // Get expectedHash
             expectedHash = request.getExpectedHash().toByteArray();
-            logger.info("Expected Hash: " + expectedHash);
             // Check if the password is valid or not
             isValidPassword = Passwords.isExpectedPassword(charPassword, salt, expectedHash);
-            logger.info("Is Valid Password: " + isValidPassword);
-
             /**
              * Creating response to user
              * Sending back: isValidPassword
@@ -114,12 +107,13 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
             PasswordValidateResponse passwordValidateResponse = PasswordValidateResponse.newBuilder()
                     .setValidPassword(isValidPassword)
                     .build();
-            logger.info("Validate Response: " + passwordValidateResponse);
+            // Logging response
+            logger.info("Validate Response\nIs Valid Password: " + passwordValidateResponse.getValidPassword());
             // Send to client
             responseObserver.onNext(passwordValidateResponse);
         } catch (RuntimeException ex) {
             System.out.println(ex);
-            logger.warning("Error thrown in validate: " + ex);
+            logger.warning("Error thrown in Validate: " + ex);
         }
         // Commit to client
         responseObserver.onCompleted();

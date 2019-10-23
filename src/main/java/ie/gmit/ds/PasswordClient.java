@@ -3,51 +3,143 @@ package ie.gmit.ds;
 import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PasswordClient {
-//    /**
-//     * Client initialisation
-//     * Using blocking stubs -- Asynchronous and Synchronous
-//     */
-//    private static final Logger logger = Logger.getLogger(PasswordClient.class.getName());
-//    private final ManagedChannel channel;
-//    private final PasswordServiceGrpc.PasswordServiceBlockingStub syncPasswordService;
-//
-//
-//    /**
-//     * Constructor
-//     *
-//     * @param host
-//     * @param port
-//     */
-//    public PasswordClient(String host, int port) {
-//        channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();
-//        syncPasswordService = PasswordServiceGrpc.newBlockingStub(channel);
-//    }
-////
-//
-//    /**
-//     * Client shutdown
-//     *
-//     * @throws InterruptedException
-//     */
-//    public void shutdown() throws InterruptedException {
-//        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-//    }
-//
-//    /**
-//     * Client Stubs
-//     * Synchronous call
-//     */
-//    public void hashNewPassword(UserInputRequest userInputRequest) {
-//        System.out.println(user);
-//    }
+    /**
+     * Client initialisation
+     * Using blocking stubs -- Asynchronous and Synchronous
+     */
+    private static final Logger logger = Logger.getLogger(PasswordClient.class.getName());
+    private final ManagedChannel channel;
+    private final PasswordServiceGrpc.PasswordServiceBlockingStub syncPasswordService;
 
+    /**
+     * Variables
+     * HOST, PORT -- Connection
+     */
     private static final String HOST = "localhost";
     private static final int PORT = 50551;
+
+    /**
+     * Client store variables
+     * userId
+     * password
+     * salt
+     * expectedHash
+     */
+    private int userId;
+    private String password;
+    private byte[] salt;
+    private byte[] expectedHash;
+
+    /**
+     * Constructor
+     *
+     * @param host
+     * @param port
+     */
+    public PasswordClient(String host, int port) {
+        channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();
+        syncPasswordService = PasswordServiceGrpc.newBlockingStub(channel);
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
+
+    public byte[] getExpectedHash() {
+        return expectedHash;
+    }
+
+    public void setExpectedHash(byte[] expectedHash) {
+        this.expectedHash = expectedHash;
+    }
+
+    /**
+     * Client shutdown
+     *
+     * @throws InterruptedException
+     */
+    public void shutdown() throws InterruptedException {
+        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Hash password
+     */
+    public void Hash(int userId, String password) {
+        UserInputRequest userInputRequest;
+        logger.info("Hash Request\nUserId: " + userId + "\nPassword: " + password); // Logging request
+        try {
+            // Create request
+            userInputRequest = UserInputRequest.newBuilder()
+                    .setUserId(userId)
+                    .setPassword(password)
+                    .build();
+        } catch (StatusRuntimeException ex) {
+            logger.log(Level.WARNING, "Hash Request Failed", ex.getStatus());
+            return;
+        }
+        // Send request using stub
+        UserInputResponse userInputResponse = syncPasswordService.hash(userInputRequest);
+        // Logging response
+        logger.info("Hash Response\nUserId: " + userId
+                + "\nSalt: " + userInputResponse.getExpectedHash().toByteArray()
+                + "\nHashed Password: " + userInputResponse.getSalt().toByteArray());
+
+        // Set all global variables
+        setUserId(userId);
+        setPassword(password);
+        setSalt(userInputResponse.getSalt().toByteArray());
+        setExpectedHash(userInputResponse.getExpectedHash().toByteArray());
+    }
+
+    /**
+     * Validate password
+     */
+    public void Validate(String password, byte[] salt, byte[] expectedHash) {
+        PasswordValidateRequest passwordValidateRequest;
+        try {
+            // Create request
+            passwordValidateRequest = PasswordValidateRequest.newBuilder()
+                    .setPassword(password)
+                    .setSalt(ByteString.copyFrom(salt))
+                    .setExpectedHash(ByteString.copyFrom(expectedHash))
+                    .build();
+        } catch (StatusRuntimeException ex) {
+            logger.log(Level.WARNING, "Validate Request Failed", ex.getStatus());
+            return;
+        }
+        // Send response using stub
+        PasswordValidateResponse passwordValidateResponse = syncPasswordService.validate(passwordValidateRequest);
+        logger.info("Validate Request\nPassword: " + password + "\nSalt: " + salt + "\nHashed Password: " + expectedHash); // Logging request
+        logger.info("Validate Response\nIs Valid Password: " + passwordValidateResponse.getValidPassword()); // Logging response
+    }
 
     /**
      * Main -- Client Runner
@@ -56,63 +148,20 @@ public class PasswordClient {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
-        String randomPassword = Passwords.generateRandomPassword(6);
-        /**
-         * Step 1 -- Create a channel
-         */
-        ManagedChannel channel = ManagedChannelBuilder
-                .forAddress(HOST, PORT)
-                .usePlaintext() // using http, use https in future
-                .build();
+        PasswordClient passwordClient = new PasswordClient(HOST, PORT);
 
-        /**
-         * Step 2 -- Create a blocking stub with the channel
-         */
-        PasswordServiceGrpc.PasswordServiceBlockingStub syncPasswordService =
-                PasswordServiceGrpc.newBlockingStub(channel);
+        try {
+            passwordClient.Hash(001, "password");
+            passwordClient.Validate(passwordClient.getPassword(),
+                    passwordClient.getSalt(),
+                    passwordClient.getExpectedHash());
 
-        /**
-         * Step 3 -- Create Request
-         */
-        UserInputRequest userInputRequest = UserInputRequest.newBuilder()
-                .setUserId(001)
-                .setPassword(randomPassword)
-                .build();
-
-        /**
-         * Step 4 -- Send request using the stub
-         */
-        UserInputResponse userInputResponse = syncPasswordService.hash(userInputRequest);
-        System.out.println("Sending Request: \n" + userInputRequest);
-        System.out.println("Received response: \n" + userInputResponse);
-
-        /**
-         * Retrieve from previous response from user in oder to validate password
-         *
-         * Store: password (char[]), salt (byte[]), expectedHash (byte[])
-         */
-        byte[] saltFromRes = userInputResponse.getSalt().toByteArray();; // Use for storing salt from previous response
-        byte[] expectedHashFromRes = userInputResponse.getExpectedHash().toByteArray();; // Use for storing hash from previous response
-
-        /**
-         * Step 3 -- Repeat for validation -- Create request
-         */
-        PasswordValidateRequest passwordValidateRequest = PasswordValidateRequest.newBuilder()
-                .setPassword(randomPassword)
-                .setSalt(ByteString.copyFrom(saltFromRes))
-                .setExpectedHash(ByteString.copyFrom(expectedHashFromRes))
-                .build();
-
-        /**
-         * Step 4 -- Repeat for validation -- Send request using the stub
-         */
-        PasswordValidateResponse passwordValidateResponse = syncPasswordService.validate(passwordValidateRequest);
-        System.out.println("Sending Request: \n" + passwordValidateRequest);
-        System.out.println("Received response: \n" + passwordValidateResponse);
-
-        /**
-         * Step 5 -- Shutdown channel
-         */
-        channel.shutdown();
+//            passwordClient.Validate("notThePassword",
+//                    passwordClient.getSalt(),
+//                    passwordClient.getExpectedHash()); // Used for testing
+        } finally {
+            // Thread.currentThread().join();
+            passwordClient.shutdown();
+        }
     }
 }

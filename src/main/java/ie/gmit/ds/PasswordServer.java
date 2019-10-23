@@ -60,6 +60,5 @@ public class PasswordServer {
         passwordServer.start();
         passwordServer.blockUntilShutdown();
     }
-
 }
 
