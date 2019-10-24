@@ -151,14 +151,17 @@ public class PasswordClient {
         PasswordClient passwordClient = new PasswordClient(HOST, PORT);
 
         try {
+            // Test 1 -- should pass --> Return true
             passwordClient.Hash(001, "password");
             passwordClient.Validate(passwordClient.getPassword(),
                     passwordClient.getSalt(),
                     passwordClient.getExpectedHash());
 
-//            passwordClient.Validate("notThePassword",
-//                    passwordClient.getSalt(),
-//                    passwordClient.getExpectedHash()); // Used for testing
+            // Test 2 -- should fail --> Return false
+            passwordClient.Hash(002, "password");
+            passwordClient.Validate("abcd",
+                    passwordClient.getSalt(),
+                    passwordClient.getExpectedHash());
         } finally {
             // Thread.currentThread().join();
             passwordClient.shutdown();
