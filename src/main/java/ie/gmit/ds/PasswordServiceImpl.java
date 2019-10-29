@@ -38,7 +38,7 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
     @Override
     public void hash(UserInputRequest request, StreamObserver<UserInputResponse> responseObserver) {
         // Logging request
-        logger.info("Hash Request\nUserId: " + request.getUserId() + "\nPassword: " + request.getPassword());
+        logger.info(String.format("Hash Request: %s", request));
         try {
             /**
              * Request from user and run through hashing function
@@ -64,13 +64,11 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
                     .setExpectedHash(ByteString.copyFrom(expectedHash))
                     .build();
             // Logging response
-            logger.info("Hash Response\nUserId: " + userInputResponse.getUserId()
-                    + "\nSalt: " + userInputResponse.getSalt()
-                    + "\nHashed Password: " + userInputResponse.getExpectedHash());
+            logger.info(String.format("Hash Response: %s", userInputResponse));
             // Send to client
             responseObserver.onNext(userInputResponse);
         } catch (RuntimeException ex) {
-            logger.warning("Error thrown in Hash: " + ex);
+            logger.warning(String.format("Error thrown in Hash: %s", ex));
         }
         // Commit to client
         responseObserver.onCompleted();
@@ -85,9 +83,7 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
     @Override
     public void validate(PasswordValidateRequest request, StreamObserver<PasswordValidateResponse> responseObserver) {
         // Logging request
-        logger.info("Validate Request\nPassword: " + request.getPassword()
-                + "\nSalt: " + request.getSalt()
-                + "\nHashed Password: " + request.getPassword());
+        logger.info(String.format("Validate Request: %s", request));
         try {
             /**
              * Request from user and run through validation function
@@ -108,12 +104,12 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
                     .setValidPassword(isValidPassword)
                     .build();
             // Logging response
-            logger.info("Validate Response\nIs Valid Password: " + passwordValidateResponse.getValidPassword());
+            logger.info(String.format("Validate Response: %s", passwordValidateResponse.getValidPassword()));
             // Send to client
             responseObserver.onNext(passwordValidateResponse);
         } catch (RuntimeException ex) {
             System.out.println(ex);
-            logger.warning("Error thrown in Validate: " + ex);
+            logger.warning(String.format("Error thrown in Validate: ", ex));
         }
         // Commit to client
         responseObserver.onCompleted();
