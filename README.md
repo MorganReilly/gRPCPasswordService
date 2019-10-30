@@ -5,3 +5,9 @@ Distributed Systems project 2019.  The purpose is to build a distributed user ac
 * https://grpc.io/docs/guides/concepts/ 
 * https://learnonline.gmit.ie/pluginfile.php/26017/course/section/26655/L8-gRPC.pdf
 * https://www.youtube.com/watch?v=kUz2zjkKxFg
+
+### To run password service -- part 1
+
+Download .jar from release version 1.1 or v1.1
+$ cd path/to/jar/file
+$ java -jar gRPCPasswordService.jar
