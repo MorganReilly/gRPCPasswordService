@@ -1,5 +1,6 @@
 ie/gmit/ds/UserAccountServiceConfiguration.class
-ie/gmit/ds/UserApiResource.class
-ie/gmit/ds/UserHealthCheck.class
+ie/gmit/ds/health/UserHealthCheck.class
+ie/gmit/ds/api/User.class
+ie/gmit/ds/resources/UserApiResource.class
 ie/gmit/ds/UserAccountServiceApplication.class
-ie/gmit/ds/User.class
+ie/gmit/ds/db/UserDB.class

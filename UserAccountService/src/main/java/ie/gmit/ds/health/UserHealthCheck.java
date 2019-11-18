@@ -1,4 +1,4 @@
-package ie.gmit.ds;
+package ie.gmit.ds.health;
 
 import com.codahale.metrics.health.HealthCheck;
 
