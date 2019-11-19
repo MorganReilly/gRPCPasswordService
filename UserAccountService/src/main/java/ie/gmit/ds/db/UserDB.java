@@ -20,9 +20,6 @@ public class UserDB {
         usersMap.put(newUser0.getUserId(), newUser0);
         usersMap.put(newUser1.getUserId(), newUser1);
         usersMap.put(newUser2.getUserId(), newUser2);
-
-//        usersMap.put(1, new User(1, "Morgan", "m@mail", "1234")); // This way uses an integer value as the index and then holds user info
-
     }
 
     /**

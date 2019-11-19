@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -39,6 +40,7 @@ public class UserApiResource {
 
     private final Validator validator;
     private UserClient userClient = new UserClient("localhost", 50551);
+    private static final Logger logger = Logger.getLogger(UserClient.class.getName());
 
     /**
      * Single arg constructor to initialise the validator
@@ -105,7 +107,7 @@ public class UserApiResource {
             // Call Password Service hash
             userClient.Hash(user.getUserId(), user.getPassword());
             // Print hash and salt to console
-            System.out.println("HASH: " + userClient.getExpectedHash() + " SALT: " + userClient.getSalt());
+            logger.info("HASH: " + userClient.getExpectedHash() + "\nSALT: " + userClient.getSalt());
             // Pass hash and salt to database
             user.setHashedPassword(userClient.getExpectedHash().toString());
             user.setSalt(userClient.getSalt().toString());
@@ -166,6 +168,19 @@ public class UserApiResource {
      * Login a user
      *
      */
+    @GET
+    @Path("/login/{userId}")
+    public Response validateUser(@PathParam("userId")int id) {
+        User user = UserDB.getUser(id);
 
+        if (user != null) {
+            // User found
+            // Validate password
+            userClient.Validate(user.getPassword(), user.getHashedPassword().getBytes(), user.getSalt().getBytes());
+            return Response.ok().build();
+        } else {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+    }
 }
 

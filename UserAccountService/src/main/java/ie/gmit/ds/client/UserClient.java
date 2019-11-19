@@ -101,6 +101,7 @@ public class UserClient {
     /**
      * Hash password
      */
+    // TODO: MAKE THIS METHOD AYSYNCHRONOUS
     public void Hash(int userId, String password) {
         UserInputRequest userInputRequest;
         logger.info("Hash Request\nUserId: " + userId + "\nPassword: " + password); // Logging request
