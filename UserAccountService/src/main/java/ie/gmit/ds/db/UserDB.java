@@ -14,9 +14,9 @@ public class UserDB {
     private static HashMap<Integer, User> usersMap = new HashMap<>();
 
     static {
-        User newUser0 = new User(1, "Morgan", "m@mail", "1234");
-        User newUser1 = new User(2, "Cathal", "c@mail", "1111");
-        User newUser2 = new User(3, "Kevin", "k@mail", "2222");
+        User newUser0 = new User(1, "Morgan", "m@mail.com", "1234");
+        User newUser1 = new User(2, "Cathal", "c@mail.com", "1111");
+        User newUser2 = new User(3, "Kevin", "k@mail.com", "2222");
         usersMap.put(newUser0.getUserId(), newUser0);
         usersMap.put(newUser1.getUserId(), newUser1);
         usersMap.put(newUser2.getUserId(), newUser2);

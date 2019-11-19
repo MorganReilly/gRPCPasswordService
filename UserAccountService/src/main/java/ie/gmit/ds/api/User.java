@@ -25,14 +25,19 @@ public class User {
     @NotNull
     private int userId;
 
-    @NotBlank @Length(min = 2, max = 255)
+    @NotBlank
+    @Length(min = 2, max = 255)
     private String userName;
 
     @Pattern(regexp = ".+@.+\\.[a-z]+")
     private String email;
 
-    @NotBlank @Length(min=2, max = 15)
+    @NotBlank
+    @Length(min = 2, max = 15)
     private String password;
+
+    private String hashedPassword;
+    private String salt;
 
     /**
      * No arg constructor
@@ -81,6 +86,18 @@ public class User {
         return password;
     }
 
+    @JsonProperty
+    public String getHashedPassword() { return hashedPassword; }
+
+    @JsonProperty
+    public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
+
+    @JsonProperty
+    public String getSalt() { return salt; }
+
+    @JsonProperty
+    public void setSalt(String salt) { this.salt = salt; }
+
     @Override
     public String toString() {
         return "User{" +
@@ -88,6 +105,8 @@ public class User {
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", hashedPassword='" + hashedPassword + '\'' +
+                ", salt='" + salt + '\'' +
                 '}';
     }
 }

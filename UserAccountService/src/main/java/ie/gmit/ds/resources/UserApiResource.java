@@ -1,6 +1,7 @@
 package ie.gmit.ds.resources;
 
 import ie.gmit.ds.api.User;
+import ie.gmit.ds.client.UserClient;
 import ie.gmit.ds.db.UserDB;
 
 
@@ -37,6 +38,7 @@ import javax.ws.rs.core.Response.Status;
 public class UserApiResource {
 
     private final Validator validator;
+    private UserClient userClient = new UserClient("localhost", 50551);
 
     /**
      * Single arg constructor to initialise the validator
@@ -87,6 +89,8 @@ public class UserApiResource {
         // Validation
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         User u = UserDB.getUser(user.getUserId());
+
+        // Validation check
         if (violations.size() > 0) {
             ArrayList<String> validationMessages = new ArrayList<String>();
             for (ConstraintViolation<User> violation : violations) {
@@ -94,9 +98,17 @@ public class UserApiResource {
             }
             return Response.status(Response.Status.BAD_REQUEST).entity(validationMessages).build();
         }
+        // If user doesn't exist => Create new user
         if (u == null) {
             System.out.println("User HERE!: " + user.toString());
-            UserDB.createUser(user.getUserId(), user);
+            UserDB.createUser(user.getUserId(), user); // New user created
+            // Call Password Service hash
+            userClient.Hash(user.getUserId(), user.getPassword());
+            // Print hash and salt to console
+            System.out.println("HASH: " + userClient.getExpectedHash() + " SALT: " + userClient.getSalt());
+            // Pass hash and salt to database
+            user.setHashedPassword(userClient.getExpectedHash().toString());
+            user.setSalt(userClient.getSalt().toString());
 
             return Response.created(new URI("/users/create" + user.getUserId())).build();
         } else {
@@ -132,6 +144,12 @@ public class UserApiResource {
         }
     }
 
+    /**
+     * Delete user by id
+     *
+     * @param id
+     * @return
+     */
     @DELETE
     @Path("/{userId}")
     public Response removeUserById(@PathParam("userId") int id) {
@@ -143,5 +161,11 @@ public class UserApiResource {
             return Response.status(Status.NOT_FOUND).build();
         }
     }
+
+    /**
+     * Login a user
+     *
+     */
+
 }
 

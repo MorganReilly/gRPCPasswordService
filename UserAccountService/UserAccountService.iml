@@ -8,6 +8,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/protobuf/grpc-java" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/protobuf/java" isTestSource="false" generated="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -115,5 +117,6 @@
     <orderEntry type="library" name="Maven: com.google.api.grpc:proto-google-common-protos:1.12.0" level="project" />
     <orderEntry type="library" name="Maven: io.grpc:grpc-protobuf-lite:1.23.0" level="project" />
     <orderEntry type="library" name="Maven: io.grpc:grpc-stub:1.23.0" level="project" />
+    <orderEntry type="library" name="Bundled Protobuf Distribution" level="application" />
   </component>
 </module>
