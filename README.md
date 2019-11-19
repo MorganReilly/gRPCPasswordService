@@ -7,10 +7,24 @@ Distributed Systems project 2019.  The purpose is to build a distributed user ac
 * https://www.youtube.com/watch?v=kUz2zjkKxFg
 
 ## References (Part 2):
-* 
+* https://howtodoinjava.com/dropwizard/tutorial-and-hello-world-example/
+* https://www.dropwizard.io/en/stable/getting-started.html
+* https://www.dropwizard.io/en/stable/manual/core.html 
 
 ### To Run Password Service -- Part 1
 
 * Download .jar from release version 1.1 or v1.1
 * $ cd path/to/jar/file
 * $ java -jar gRPCPasswordService.jar
+
+### To Run User Service -- Part 2
+
+* Download ....
+* $ cd path/to/extracted/project
+* $ java -jar .....
+
+### To test both:
+
+* Do this
+* then this
+* and this...
