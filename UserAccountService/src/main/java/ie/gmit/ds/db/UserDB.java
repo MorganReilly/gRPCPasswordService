@@ -25,23 +25,50 @@ public class UserDB {
 
     }
 
+    /**
+     * Get all users
+     *
+     * @return
+     */
     public static List<User> getUsers() {
         return new ArrayList<User>(usersMap.values());
     }
 
+    /**
+     * Get a user by Id
+     *
+     * @param id
+     * @return
+     */
     public static User getUser(int id) {
         return usersMap.get(id);
     }
 
-
+    /**
+     * Create a user by Id
+     *
+     * @param userId
+     * @param user
+     */
     public static void createUser(int userId, User user) {
         usersMap.put(userId, user);
     }
 
+    /**
+     * Update user by Id
+     *
+     * @param userId
+     * @param user
+     */
     public static void updateUser(int userId, User user) {
         usersMap.put(userId, user);
     }
 
+    /**
+     * Delete user by Id
+     *
+     * @param userId
+     */
     public static void deleteUser(int userId) {
         usersMap.remove(userId);
     }

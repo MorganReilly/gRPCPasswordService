@@ -32,7 +32,7 @@ import javax.ws.rs.core.Response.Status;
  * https://howtodoinjava.com/dropwizard/tutorial-and-hello-world-example/
  * https://www.dropwizard.io/en/stable/getting-started.html
  */
-@Path("/") // Tells Jersey that this resource is accessible at URL
+@Path("/users") // Tells Jersey that this resource is accessible at URL
 @Produces(MediaType.APPLICATION_JSON) // Lets Jersey content negotiate JSON
 public class UserApiResource {
 
@@ -53,7 +53,6 @@ public class UserApiResource {
      * @return
      */
     @GET
-    @Path("/users") // Remove later on ?
     public Response getUsers() {
         return Response.ok(UserDB.getUsers()).build();
     }
@@ -65,7 +64,7 @@ public class UserApiResource {
      * @return
      */
     @GET
-    @Path("/users/{userId}")
+    @Path("/{userId}")
     public Response getUserById(@PathParam("userId") int id) {
         User user = UserDB.getUser(id);
         if (user != null) {
@@ -83,7 +82,6 @@ public class UserApiResource {
      * @throws URISyntaxException
      */
     @POST
-    @Path("/users/create")
     public Response createUser(User user) throws URISyntaxException {
         System.out.println("User: " + user.toString());
         // Validation
@@ -114,7 +112,7 @@ public class UserApiResource {
      * @return
      */
     @PUT
-    @Path("/users/{userId}")
+    @Path("/{userId}")
     public Response updateUserById(@PathParam("userId") int id, User user) {
         // Validation
         Set<ConstraintViolation<User>> violations = validator.validate(user);
@@ -126,7 +124,7 @@ public class UserApiResource {
             }
             return Response.status(Status.BAD_REQUEST).entity(validationMessages).build();
         }
-        if (u == null) {
+        if (u != null) {
             UserDB.updateUser(user.getUserId(), user);
             return Response.ok(user).build();
         } else {
@@ -135,7 +133,7 @@ public class UserApiResource {
     }
 
     @DELETE
-    @Path("/users/{userId}")
+    @Path("/{userId}")
     public Response removeUserById(@PathParam("userId") int id) {
         User user = UserDB.getUser(id);
         if (user != null) {
