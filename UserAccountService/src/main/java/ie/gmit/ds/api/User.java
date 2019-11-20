@@ -46,8 +46,14 @@ public class User {
     public User() {
     }
 
+    public User(int userId, String userName, String email) {
+        this.userId = userId;
+        this.userName = userName;
+        this.email = email;
+    }
+
     /**
-     * 4 Param constructor
+     * 4 Param constructor -- Use for sending ?
      *
      * @param userId
      * @param userName
@@ -61,9 +67,40 @@ public class User {
         this.password = password;
     }
 
-    @JsonProperty
-    public void setUserId(int userId) {
+    /**
+     * 5 Param constructor -- Use for storing ?
+     *
+     * @param userId
+     * @param userName
+     * @param email
+     * @param hashedPassword
+     * @param salt
+     */
+    public User(int userId, String userName, String email, String hashedPassword, String salt) {
         this.userId = userId;
+        this.userName = userName;
+        this.email = email;
+        this.hashedPassword = hashedPassword;
+        this.salt = salt;
+    }
+
+    /**
+     * Full param constructor -- May not use
+     *
+     * @param userId
+     * @param userName
+     * @param email
+     * @param password
+     * @param hashedPassword
+     * @param salt
+     */
+    public User(int userId, String userName, String email, String password, String hashedPassword, String salt) {
+        this.userId = userId;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.hashedPassword = hashedPassword;
+        this.salt = salt;
     }
 
     @JsonProperty
@@ -87,16 +124,14 @@ public class User {
     }
 
     @JsonProperty
-    public String getHashedPassword() { return hashedPassword; }
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
 
     @JsonProperty
-    public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
-
-    @JsonProperty
-    public String getSalt() { return salt; }
-
-    @JsonProperty
-    public void setSalt(String salt) { this.salt = salt; }
+    public String getSalt() {
+        return salt;
+    }
 
     @Override
     public String toString() {

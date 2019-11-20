@@ -2,9 +2,12 @@ package ie.gmit.ds.client;
 
 import com.google.protobuf.ByteString;
 import ie.gmit.ds.*;
+import ie.gmit.ds.api.User;
+import ie.gmit.ds.db.UserDB;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import io.grpc.stub.StreamObserver;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -19,6 +22,7 @@ public class UserClient {
     private static final Logger logger = Logger.getLogger(UserClient.class.getName());
     private final ManagedChannel channel;
     private final PasswordServiceGrpc.PasswordServiceBlockingStub syncPasswordService; // Synchronous call
+    private final PasswordServiceGrpc.PasswordServiceStub asyncInventoryService; // Asynchronous call
 
     /**
      * Variables
@@ -26,22 +30,6 @@ public class UserClient {
      */
     private static final String HOST = "localhost";
     private static final int PORT = 50551;
-
-    /**
-     * Client store variables
-     * userId
-     * userName
-     * email
-     * password
-     * salt
-     * expectedHash
-     */
-    private int userId;
-    private String userName;
-    private String email;
-    private String password;
-    private byte[] salt; // TODO: Convert to String later ?
-    private byte[] expectedHash; // TODO: Convert to String later ?
 
     /**
      * Constructor
@@ -52,42 +40,8 @@ public class UserClient {
     public UserClient(String host, int port) {
         channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();
         syncPasswordService = PasswordServiceGrpc.newBlockingStub(channel);
+        asyncInventoryService = PasswordServiceGrpc.newStub(channel);
     }
-
-    /**
-     * Getters / Setters
-     */
-    public static Logger getLogger() { return logger; }
-
-    public ManagedChannel getChannel() { return channel; }
-
-    public static String getHOST() { return HOST; }
-
-    public static int getPORT() { return PORT; }
-
-    public int getUserId() { return userId; }
-
-    public void setUserId(int userId) { this.userId = userId; }
-
-    public String getUserName() { return userName; }
-
-    public void setUserName(String userName) { this.userName = userName; }
-
-    public String getEmail() { return email; }
-
-    public void setEmail(String email) { this.email = email; }
-
-    public String getPassword() { return password; }
-
-    public void setPassword(String password) { this.password = password; }
-
-    public byte[] getSalt() { return salt; }
-
-    public void setSalt(byte[] salt) { this.salt = salt; }
-
-    public byte[] getExpectedHash() { return expectedHash; }
-
-    public void setExpectedHash(byte[] expectedHash) { this.expectedHash = expectedHash; }
 
     /**
      * Client shutdown
@@ -101,32 +55,34 @@ public class UserClient {
     /**
      * Hash password
      */
-    // TODO: MAKE THIS METHOD AYSYNCHRONOUS
-    public void Hash(int userId, String password) {
-        UserInputRequest userInputRequest;
-        logger.info("Hash Request\nUserId: " + userId + "\nPassword: " + password); // Logging request
-        try {
-            // Create request
-            userInputRequest = UserInputRequest.newBuilder()
-                    .setUserId(userId)
-                    .setPassword(password)
-                    .build();
-        } catch (StatusRuntimeException ex) {
-            logger.log(Level.WARNING, "Hash Request Failed", ex.getStatus());
-            return;
-        }
-        // Send request using stub
-        UserInputResponse userInputResponse = syncPasswordService.hash(userInputRequest);
-        // Logging response
-        logger.info("Hash Response\nUserId: " + userId
-                + "\nSalt: " + userInputResponse.getExpectedHash().toByteArray()
-                + "\nHashed Password: " + userInputResponse.getSalt().toByteArray());
+    public void Hash(User user) {
+        StreamObserver<UserInputResponse> responseStreamObserver = new StreamObserver<UserInputResponse>() {
+            @Override
+            public void onNext(UserInputResponse userInputResponse) {
+                // Create an instance of the database and add a user here
+                // This allows for specific entries on the user
+                // Also avoids storing the password
+                User u = new User(userInputResponse.getUserId(), user.getUserName(),
+                        user.getEmail(), userInputResponse.getExpectedHash().toStringUtf8(), userInputResponse.getSalt().toStringUtf8());
+                UserDB.createUser(user.getUserId(), u);
+            }
 
-        // Set all global variables
-        setUserId(userId);
-        setPassword(password);
-        setSalt(userInputResponse.getSalt().toByteArray());
-        setExpectedHash(userInputResponse.getExpectedHash().toByteArray());
+            @Override
+            public void onError(Throwable throwable) {
+            }
+
+            @Override
+            public void onCompleted() {
+            }
+        };
+        try {
+            asyncInventoryService.hash(UserInputRequest.newBuilder()
+                    .setUserId(user.getUserId())
+                    .setPassword(user.getPassword())
+                    .build(), responseStreamObserver);
+        } catch (StatusRuntimeException ex) {
+            logger.warning("Exception: " + ex);
+        }
     }
 
     /**
@@ -149,25 +105,5 @@ public class UserClient {
         PasswordValidateResponse passwordValidateResponse = syncPasswordService.validate(passwordValidateRequest);
         logger.info("Validate Request\nPassword: " + password + "\nSalt: " + salt + "\nHashed Password: " + expectedHash); // Logging request
         logger.info("Validate Response\nIs Valid Password: " + passwordValidateResponse.getValidPassword()); // Logging response
-    }
-
-    public static void main(String[] args) throws InterruptedException{
-        UserClient userClient = new UserClient(HOST, PORT);
-
-        try {
-            // Test 1 -- Should pass --> Return true
-            userClient.Hash(001, "password");
-            userClient.Validate(userClient.getPassword(),
-                    userClient.getSalt(),
-                    userClient.getExpectedHash());
-
-            // Test 2 -- Should fail --> Return false
-            userClient.Hash(002, "fuckGRPC");
-            userClient.Validate("fucGEEORPEECEE",
-                    userClient.getSalt(),
-                    userClient.getExpectedHash());
-        } finally {
-            userClient.shutdown();
-        }
     }
 }

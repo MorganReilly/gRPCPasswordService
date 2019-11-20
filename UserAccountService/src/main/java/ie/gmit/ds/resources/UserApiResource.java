@@ -24,7 +24,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-
 /**
  * Resource class for User (Representation class)
  * <p>
@@ -87,10 +86,11 @@ public class UserApiResource {
      */
     @POST
     public Response createUser(User user) throws URISyntaxException {
-        System.out.println("User: " + user.toString());
-        // Validation
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-        User u = UserDB.getUser(user.getUserId());
+        logger.info("User: " + user);
+
+
+        Set<ConstraintViolation<User>> violations = validator.validate(user); // Validation
+        User u = UserDB.getUser(user.getUserId()); // Used for validation
 
         // Validation check
         if (violations.size() > 0) {
@@ -100,17 +100,12 @@ public class UserApiResource {
             }
             return Response.status(Response.Status.BAD_REQUEST).entity(validationMessages).build();
         }
+
         // If user doesn't exist => Create new user
         if (u == null) {
-            System.out.println("User HERE!: " + user.toString());
-            UserDB.createUser(user.getUserId(), user); // New user created
-            // Call Password Service hash
-            userClient.Hash(user.getUserId(), user.getPassword());
-            // Print hash and salt to console
-            logger.info("HASH: " + userClient.getExpectedHash() + "\nSALT: " + userClient.getSalt());
-            // Pass hash and salt to database
-            user.setHashedPassword(userClient.getExpectedHash().toString());
-            user.setSalt(userClient.getSalt().toString());
+            logger.info("User Didn't exist\n Creating new user: " + user);
+
+            userClient.Hash(user);
 
             return Response.created(new URI("/users/create" + user.getUserId())).build();
         } else {
@@ -168,19 +163,18 @@ public class UserApiResource {
      * Login a user
      *
      */
-    @GET
-    @Path("/login/{userId}")
-    public Response validateUser(@PathParam("userId")int id) {
-        User user = UserDB.getUser(id);
-
-        if (user != null) {
-            // User found
-            // Validate password
-            userClient.Validate(user.getPassword(), user.getHashedPassword().getBytes(), user.getSalt().getBytes());
-            return Response.ok().build();
-        } else {
-            return Response.status(Status.NOT_FOUND).build();
-        }
-    }
+//    @POST
+//    @Path("/login")
+//    public Response validateUser(User user) throws URISyntaxException {
+//        User u = UserDB.getUser(user.getUserId());
+//        // If user exists => Try log in
+//        if (u != null) {
+//            System.out.println(user.getUserId() + " " + user.getUserName());
+//            userClient.Validate(user.getPassword(), user.getHashedPassword().getBytes(), user.getSalt().getBytes());
+//            return Response.ok().build();
+//        } else {
+//            return Response.status(Response.Status.NOT_FOUND).build();
+//        }
+//    }
 }
 
