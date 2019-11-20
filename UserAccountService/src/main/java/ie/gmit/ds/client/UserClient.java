@@ -3,6 +3,7 @@ package ie.gmit.ds.client;
 import com.google.protobuf.ByteString;
 import ie.gmit.ds.*;
 import ie.gmit.ds.api.User;
+import ie.gmit.ds.api.UserLogin;
 import ie.gmit.ds.db.UserDB;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -63,8 +64,9 @@ public class UserClient {
                 // This allows for specific entries on the user
                 // Also avoids storing the password
                 User u = new User(userInputResponse.getUserId(), user.getUserName(),
-                        user.getEmail(), userInputResponse.getExpectedHash().toStringUtf8(), userInputResponse.getSalt().toStringUtf8());
-                UserDB.createUser(user.getUserId(), u);
+                        user.getEmail(), userInputResponse.getExpectedHash(), userInputResponse.getSalt());
+                UserDB.createUser(u.getUserId(), u);
+                logger.info("USER: " + userInputResponse);
             }
 
             @Override
@@ -88,22 +90,23 @@ public class UserClient {
     /**
      * Validate password
      */
-    public void Validate(String password, byte[] salt, byte[] expectedHash) {
+    public boolean Validate(UserLogin userLogin, ByteString salt, ByteString expectedHash) {
         PasswordValidateRequest passwordValidateRequest;
         try {
             // Create request
             passwordValidateRequest = PasswordValidateRequest.newBuilder()
-                    .setPassword(password)
-                    .setSalt(ByteString.copyFrom(salt))
-                    .setExpectedHash(ByteString.copyFrom(expectedHash))
+                    .setPassword(userLogin.getPassword())
+                    .setSalt(salt)
+                    .setExpectedHash(expectedHash)
                     .build();
         } catch (StatusRuntimeException ex) {
             logger.log(Level.WARNING, "Validate Request Failed", ex.getStatus());
-            return;
+            return false;
         }
         // Send response using stub
         PasswordValidateResponse passwordValidateResponse = syncPasswordService.validate(passwordValidateRequest);
-        logger.info("Validate Request\nPassword: " + password + "\nSalt: " + salt + "\nHashed Password: " + expectedHash); // Logging request
+        logger.info("Validate Request\nPassword: " + userLogin.getPassword() + "\nSalt: " + salt + "\nHashed Password: " + expectedHash); // Logging request
         logger.info("Validate Response\nIs Valid Password: " + passwordValidateResponse.getValidPassword()); // Logging response
+        return true;
     }
 }

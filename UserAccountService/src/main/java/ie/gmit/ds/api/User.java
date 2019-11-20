@@ -1,6 +1,7 @@
 package ie.gmit.ds.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.protobuf.ByteString;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -36,8 +37,8 @@ public class User {
     @Length(min = 2, max = 15)
     private String password;
 
-    private String hashedPassword;
-    private String salt;
+    private ByteString hashedPassword;
+    private ByteString salt;
 
     /**
      * No arg constructor
@@ -76,7 +77,7 @@ public class User {
      * @param hashedPassword
      * @param salt
      */
-    public User(int userId, String userName, String email, String hashedPassword, String salt) {
+    public User(int userId, String userName, String email, ByteString hashedPassword, ByteString salt) {
         this.userId = userId;
         this.userName = userName;
         this.email = email;
@@ -94,7 +95,7 @@ public class User {
      * @param hashedPassword
      * @param salt
      */
-    public User(int userId, String userName, String email, String password, String hashedPassword, String salt) {
+    public User(int userId, String userName, String email, String password, ByteString hashedPassword, ByteString salt) {
         this.userId = userId;
         this.userName = userName;
         this.email = email;
@@ -124,12 +125,12 @@ public class User {
     }
 
     @JsonProperty
-    public String getHashedPassword() {
+    public ByteString getHashedPassword() {
         return hashedPassword;
     }
 
     @JsonProperty
-    public String getSalt() {
+    public ByteString getSalt() {
         return salt;
     }
 
@@ -140,8 +141,8 @@ public class User {
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", hashedPassword='" + hashedPassword + '\'' +
-                ", salt='" + salt + '\'' +
+                ", hashedPassword=" + hashedPassword +
+                ", salt=" + salt +
                 '}';
     }
 }

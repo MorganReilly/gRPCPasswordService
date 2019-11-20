@@ -1,5 +1,8 @@
 package ie.gmit.ds.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -19,4 +22,37 @@ import javax.validation.constraints.NotNull;
  */
 public class UserLogin {
 
+    @NotNull
+    private int userId;
+
+    @NotBlank
+    private String password;
+
+    /**
+     * No arg constructor
+     * Needed for Jackson deserialisation
+     */
+    public UserLogin() {
+    }
+
+    /**
+     * 2 Arg constructor
+     *
+     * @param userId
+     * @param password
+     */
+    public UserLogin(int userId, String password) {
+        this.userId = userId;
+        this.password = password;
+    }
+
+    @JsonProperty
+    public int getUserId() {
+        return userId;
+    }
+
+    @JsonProperty
+    public String getPassword() {
+        return password;
+    }
 }

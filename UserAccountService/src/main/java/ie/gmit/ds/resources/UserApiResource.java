@@ -1,8 +1,10 @@
 package ie.gmit.ds.resources;
 
 import ie.gmit.ds.api.User;
+import ie.gmit.ds.api.UserLogin;
 import ie.gmit.ds.client.UserClient;
 import ie.gmit.ds.db.UserDB;
+import sun.rmi.runtime.Log;
 
 
 import java.net.URI;
@@ -37,8 +39,12 @@ import javax.ws.rs.core.Response.Status;
 @Produces(MediaType.APPLICATION_JSON) // Lets Jersey content negotiate JSON
 public class UserApiResource {
 
-    private final Validator validator;
-    private UserClient userClient = new UserClient("localhost", 50551);
+    private final Validator validator; // Validation
+    private UserClient userClient;// UserClient instance with host and port
+
+    private final String HOST = "localhost";
+    private final int PORT = 50551;
+
     private static final Logger logger = Logger.getLogger(UserClient.class.getName());
 
     /**
@@ -48,6 +54,7 @@ public class UserApiResource {
      */
     public UserApiResource(Validator validator) {
         this.validator = validator;
+        this.userClient = new UserClient(HOST, PORT);
     }
 
     /**
@@ -71,6 +78,7 @@ public class UserApiResource {
     public Response getUserById(@PathParam("userId") int id) {
         User user = UserDB.getUser(id);
         if (user != null) {
+            logger.info("USER HASH!!!: " + user.getHashedPassword());
             return Response.ok(user).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -87,12 +95,10 @@ public class UserApiResource {
     @POST
     public Response createUser(User user) throws URISyntaxException {
         logger.info("User: " + user);
-
-
         Set<ConstraintViolation<User>> violations = validator.validate(user); // Validation
         User u = UserDB.getUser(user.getUserId()); // Used for validation
 
-        // Validation check
+        // Validation check => User exists
         if (violations.size() > 0) {
             ArrayList<String> validationMessages = new ArrayList<String>();
             for (ConstraintViolation<User> violation : violations) {
@@ -103,11 +109,10 @@ public class UserApiResource {
 
         // If user doesn't exist => Create new user
         if (u == null) {
-            logger.info("User Didn't exist\n Creating new user: " + user);
 
             userClient.Hash(user);
 
-            return Response.created(new URI("/users/create" + user.getUserId())).build();
+            return Response.created(new URI("/users/" + user.getUserId())).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -161,20 +166,21 @@ public class UserApiResource {
 
     /**
      * Login a user
-     *
      */
-//    @POST
-//    @Path("/login")
-//    public Response validateUser(User user) throws URISyntaxException {
-//        User u = UserDB.getUser(user.getUserId());
-//        // If user exists => Try log in
-//        if (u != null) {
-//            System.out.println(user.getUserId() + " " + user.getUserName());
-//            userClient.Validate(user.getPassword(), user.getHashedPassword().getBytes(), user.getSalt().getBytes());
-//            return Response.ok().build();
-//        } else {
-//            return Response.status(Response.Status.NOT_FOUND).build();
-//        }
-//    }
+    @POST
+    @Path("/login")
+    public Response validateUser(UserLogin userLogin) {
+        Set<ConstraintViolation<UserLogin>> violations = validator.validate(userLogin);
+
+        if (violations.size() > 0) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else {
+            if (userClient.Validate(userLogin, UserDB.getUser(userLogin.getUserId()).getHashedPassword(), UserDB.getUser(userLogin.getUserId()).getSalt())) {
+                return Response.ok().build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        }
+    }
 }
 
