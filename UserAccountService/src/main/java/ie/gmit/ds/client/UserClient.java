@@ -7,6 +7,7 @@ import ie.gmit.ds.api.UserLogin;
 import ie.gmit.ds.db.UserDB;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
@@ -24,13 +25,6 @@ public class UserClient {
     private final ManagedChannel channel;
     private final PasswordServiceGrpc.PasswordServiceBlockingStub syncPasswordService; // Synchronous call
     private final PasswordServiceGrpc.PasswordServiceStub asyncInventoryService; // Asynchronous call
-
-    /**
-     * Variables
-     * HOST, PORT -- Connection
-     */
-    private static final String HOST = "localhost";
-    private static final int PORT = 50551;
 
     /**
      * Constructor
@@ -63,7 +57,7 @@ public class UserClient {
                 // Create an instance of the database and add a user here
                 // This allows for specific entries on the user
                 // Also avoids storing the password
-                User u = new User(userInputResponse.getUserId(), user.getUserName(),
+                User u = new User(user.getUserId(), user.getUserName(),
                         user.getEmail(), userInputResponse.getExpectedHash(), userInputResponse.getSalt());
                 UserDB.createUser(u.getUserId(), u);
                 logger.info("USER: " + userInputResponse);
@@ -71,10 +65,19 @@ public class UserClient {
 
             @Override
             public void onError(Throwable throwable) {
+                Status status = Status.fromThrowable(throwable);
+
+                logger.log(Level.WARNING, "RPC Error: {0}", status);
             }
 
             @Override
             public void onCompleted() {
+//                logger.info("Finished receiving items");
+//                try {
+//                    shutdown();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
         };
         try {
@@ -90,23 +93,19 @@ public class UserClient {
     /**
      * Validate password
      */
-    public boolean Validate(UserLogin userLogin, ByteString salt, ByteString expectedHash) {
-        PasswordValidateRequest passwordValidateRequest;
+    public boolean Validate(String password, ByteString expectedHash, ByteString salt) {
+        PasswordValidateRequest passwordValidateRequest = PasswordValidateRequest.newBuilder()
+                .setPassword(password)
+                .setExpectedHash(expectedHash)
+                .setSalt(salt)
+                .build();
         try {
-            // Create request
-            passwordValidateRequest = PasswordValidateRequest.newBuilder()
-                    .setPassword(userLogin.getPassword())
-                    .setSalt(salt)
-                    .setExpectedHash(expectedHash)
-                    .build();
+            PasswordValidateResponse passwordValidateResponse = syncPasswordService.validate(passwordValidateRequest);
+            logger.info("VALID PASSWORD: " + passwordValidateResponse.getValidPassword());
+            return passwordValidateResponse.getValidPassword();
         } catch (StatusRuntimeException ex) {
-            logger.log(Level.WARNING, "Validate Request Failed", ex.getStatus());
+            logger.warning("Exception caught: " + ex.getLocalizedMessage());
             return false;
         }
-        // Send response using stub
-        PasswordValidateResponse passwordValidateResponse = syncPasswordService.validate(passwordValidateRequest);
-        logger.info("Validate Request\nPassword: " + userLogin.getPassword() + "\nSalt: " + salt + "\nHashed Password: " + expectedHash); // Logging request
-        logger.info("Validate Response\nIs Valid Password: " + passwordValidateResponse.getValidPassword()); // Logging response
-        return true;
     }
 }

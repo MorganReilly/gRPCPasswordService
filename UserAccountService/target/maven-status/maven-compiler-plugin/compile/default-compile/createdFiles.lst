@@ -30,7 +30,6 @@ ie/gmit/ds/PasswordValidateRequest$1.class
 ie/gmit/ds/PasswordServiceGrpc$PasswordServiceFutureStub.class
 ie/gmit/ds/UserInputRequest$Builder.class
 ie/gmit/ds/UserAccountServiceApplication.class
-ie/gmit/ds/PasswordServiceGrpc$1.class
 ie/gmit/ds/UserInputRequest$1.class
 ie/gmit/ds/Password.class
 ie/gmit/ds/PasswordValidateResponseOrBuilder.class

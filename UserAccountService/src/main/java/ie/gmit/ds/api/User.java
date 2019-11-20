@@ -47,19 +47,10 @@ public class User {
     public User() {
     }
 
-    public User(int userId, String userName, String email) {
-        this.userId = userId;
-        this.userName = userName;
-        this.email = email;
-    }
-
     /**
-     * 4 Param constructor -- Use for sending ?
+     * 4 param constructor
      *
-     * @param userId
-     * @param userName
-     * @param email
-     * @param password
+     * Using for testing
      */
     public User(int userId, String userName, String email, String password) {
         this.userId = userId;
@@ -81,25 +72,6 @@ public class User {
         this.userId = userId;
         this.userName = userName;
         this.email = email;
-        this.hashedPassword = hashedPassword;
-        this.salt = salt;
-    }
-
-    /**
-     * Full param constructor -- May not use
-     *
-     * @param userId
-     * @param userName
-     * @param email
-     * @param password
-     * @param hashedPassword
-     * @param salt
-     */
-    public User(int userId, String userName, String email, String password, ByteString hashedPassword, ByteString salt) {
-        this.userId = userId;
-        this.userName = userName;
-        this.email = email;
-        this.password = password;
         this.hashedPassword = hashedPassword;
         this.salt = salt;
     }

@@ -35,17 +35,6 @@ public class UserLogin {
     public UserLogin() {
     }
 
-    /**
-     * 2 Arg constructor
-     *
-     * @param userId
-     * @param password
-     */
-    public UserLogin(int userId, String password) {
-        this.userId = userId;
-        this.password = password;
-    }
-
     @JsonProperty
     public int getUserId() {
         return userId;

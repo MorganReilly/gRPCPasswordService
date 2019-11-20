@@ -4,7 +4,6 @@ import ie.gmit.ds.api.User;
 import ie.gmit.ds.api.UserLogin;
 import ie.gmit.ds.client.UserClient;
 import ie.gmit.ds.db.UserDB;
-import sun.rmi.runtime.Log;
 
 
 import java.net.URI;
@@ -78,7 +77,6 @@ public class UserApiResource {
     public Response getUserById(@PathParam("userId") int id) {
         User user = UserDB.getUser(id);
         if (user != null) {
-            logger.info("USER HASH!!!: " + user.getHashedPassword());
             return Response.ok(user).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -94,24 +92,19 @@ public class UserApiResource {
      */
     @POST
     public Response createUser(User user) throws URISyntaxException {
-        logger.info("User: " + user);
         Set<ConstraintViolation<User>> violations = validator.validate(user); // Validation
         User u = UserDB.getUser(user.getUserId()); // Used for validation
-
         // Validation check => User exists
         if (violations.size() > 0) {
-            ArrayList<String> validationMessages = new ArrayList<String>();
+            ArrayList<String> validationMessages = new ArrayList<>();
             for (ConstraintViolation<User> violation : violations) {
                 validationMessages.add(violation.getPropertyPath().toString());
             }
             return Response.status(Response.Status.BAD_REQUEST).entity(validationMessages).build();
         }
-
         // If user doesn't exist => Create new user
         if (u == null) {
-
             userClient.Hash(user);
-
             return Response.created(new URI("/users/" + user.getUserId())).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -132,14 +125,15 @@ public class UserApiResource {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         User u = UserDB.getUser(user.getUserId());
         if (violations.size() > 0) {
-            ArrayList<String> validationMessages = new ArrayList<String>();
+            ArrayList<String> validationMessages = new ArrayList<>();
             for (ConstraintViolation<User> violation : violations) {
                 validationMessages.add(violation.getPropertyPath().toString());
             }
             return Response.status(Status.BAD_REQUEST).entity(validationMessages).build();
         }
         if (u != null) {
-            UserDB.updateUser(user.getUserId(), user);
+            UserDB.updateUser(id, user); // Remove initial user
+            userClient.Hash(user); // Add updated user with correct hash and salt
             return Response.ok(user).build();
         } else {
             return Response.status(Status.NOT_FOUND).build();
@@ -171,16 +165,23 @@ public class UserApiResource {
     @Path("/login")
     public Response validateUser(UserLogin userLogin) {
         Set<ConstraintViolation<UserLogin>> violations = validator.validate(userLogin);
-
+        User user = UserDB.getUser(userLogin.getUserId());
         if (violations.size() > 0) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        } else {
-            if (userClient.Validate(userLogin, UserDB.getUser(userLogin.getUserId()).getHashedPassword(), UserDB.getUser(userLogin.getUserId()).getSalt())) {
+            ArrayList<String> validationMessages = new ArrayList<>();
+            for (ConstraintViolation<UserLogin> violation : violations) {
+                validationMessages.add(violation.getPropertyPath().toString() + ": " + violation.getMessage());
+            }//End for loop
+            //Return status response to client
+            return Response.status(Response.Status.BAD_REQUEST).entity(validationMessages).build();
+        }
+        if (user != null) {
+            if (userClient.Validate(userLogin.getPassword(), user.getHashedPassword(), user.getSalt())) {
                 return Response.ok().build();
             } else {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-        }
+        } else
+            return Response.status(Response.Status.NOT_FOUND).build();
     }
 }
 
