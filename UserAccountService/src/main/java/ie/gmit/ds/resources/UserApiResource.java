@@ -1,5 +1,6 @@
 package ie.gmit.ds.resources;
 
+import ie.gmit.ds.api.Message;
 import ie.gmit.ds.api.User;
 import ie.gmit.ds.api.UserLogin;
 import ie.gmit.ds.client.UserClient;
@@ -79,7 +80,7 @@ public class UserApiResource {
         if (user != null) {
             return Response.ok(user).build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Status.NOT_FOUND).entity(new Message("User Not Found!")).build();
         }
     }
 
@@ -105,9 +106,9 @@ public class UserApiResource {
         // If user doesn't exist => Create new user
         if (u == null) {
             userClient.Hash(user);
-            return Response.created(new URI("/users/" + user.getUserId())).build();
+            return Response.status(Status.OK).entity(new Message("User Created Successfully!")).build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Status.NOT_FOUND).entity(new Message("User Already Exists!")).build();
         }
     }
 
@@ -134,9 +135,9 @@ public class UserApiResource {
         if (u != null) {
             UserDB.updateUser(id, user); // Remove initial user
             userClient.Hash(user); // Add updated user with correct hash and salt
-            return Response.ok(user).build();
+            return Response.status(Status.OK).entity(new Message("User Updated Successfully!")).build();
         } else {
-            return Response.status(Status.NOT_FOUND).build();
+            return Response.status(Status.NOT_FOUND).entity(new Message("User Not Found!")).build();
         }
     }
 
@@ -152,9 +153,9 @@ public class UserApiResource {
         User user = UserDB.getUser(id);
         if (user != null) {
             UserDB.deleteUser(id);
-            return Response.ok().build();
+            return Response.status(Status.OK).entity(new Message("User Deleted Successfully!")).build();
         } else {
-            return Response.status(Status.NOT_FOUND).build();
+            return Response.status(Status.NOT_FOUND).entity(new Message("User Not Found!")).build();
         }
     }
 
@@ -176,12 +177,12 @@ public class UserApiResource {
         }
         if (user != null) {
             if (userClient.Validate(userLogin.getPassword(), user.getHashedPassword(), user.getSalt())) {
-                return Response.ok().build();
+                return Response.status(Status.OK).entity(new Message("User Logged in Successfully!")).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new Message("Invalid Password!")).build();
             }
         } else
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Status.NOT_FOUND).entity(new Message("User Not Found!")).build();
     }
 }
 

@@ -13,6 +13,7 @@ ie/gmit/ds/UserInputRequestOrBuilder.class
 ie/gmit/ds/PasswordServiceGrpc$PasswordServiceStub.class
 ie/gmit/ds/PasswordServiceGrpc$MethodHandlers.class
 ie/gmit/ds/db/UserDB.class
+ie/gmit/ds/api/Message.class
 ie/gmit/ds/PasswordValidateRequestOrBuilder.class
 ie/gmit/ds/PasswordServiceGrpc.class
 ie/gmit/ds/client/UserClient$1.class
