@@ -24,7 +24,7 @@ Distributed Systems project 2019.  The purpose is to build a distributed user ac
 
 * Download .jar from release version 1.0
 * $ cd path/to/jar/file
-* $ java -jar target/DropWizardExample-1.0-SNAPSHOT.jar server userAccountServiceConfiguration.yml 
+* $ java -jar DropWizardExample-1.0-SNAPSHOT.jar server userAccountServiceConfiguration.yml 
 
 ### To Test Both:
 
