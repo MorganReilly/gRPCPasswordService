@@ -21,7 +21,6 @@ import javax.validation.constraints.NotNull;
  * Using this class to allow the user to login
  */
 public class UserLogin {
-
     @NotNull
     private int userId;
 

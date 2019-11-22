@@ -11,6 +11,9 @@ Distributed Systems project 2019.  The purpose is to build a distributed user ac
 * https://www.dropwizard.io/en/stable/getting-started.html
 * https://www.dropwizard.io/en/stable/manual/core.html 
 
+## Link to SwaggerHub API Documentation
+* https://app.swaggerhub.com/apis/MorganReilly/UserAPI/1
+
 ### To Run Password Service -- Part 1
 
 * Download .jar from release version 1.1 or v1.1
@@ -19,12 +22,13 @@ Distributed Systems project 2019.  The purpose is to build a distributed user ac
 
 ### To Run User Service -- Part 2
 
-* Download ....
-* $ cd path/to/extracted/project
-* $ java -jar .....
+* Download .jar from release version 1.0
+* $ cd path/to/jar/file
+* $ java -jar target/DropWizardExample-1.0-SNAPSHOT.jar server userAccountServiceConfiguration.yml 
 
-### To test both:
+### To Test Both:
 
-* Do this
-* then this
-* and this...
+* Start Part 1 - See above
+* Start Part 2 - See above
+* Check Documentation from Swaggerhub link
+* Open Postman to send REST requests and view responses

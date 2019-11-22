@@ -3,7 +3,6 @@ package ie.gmit.ds.client;
 import com.google.protobuf.ByteString;
 import ie.gmit.ds.*;
 import ie.gmit.ds.api.User;
-import ie.gmit.ds.api.UserLogin;
 import ie.gmit.ds.db.UserDB;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;

@@ -14,23 +14,23 @@ public class UserDB {
     private static HashMap<Integer, User> usersMap = new HashMap<>();
 
     /**
-     * Use this for testing
+     * Use this for initial testing
      */
-    static {
-        User newUser0 = new User(6, "Morgan", "m@mail.com", "1234");
-        User newUser1 = new User(7, "Cathal", "c@mail.com", "5555");
-        User newUser2 = new User(8, "Kevin", "k@mail.com", "11111");
-        usersMap.put(newUser0.getUserId(), newUser0);
-        usersMap.put(newUser1.getUserId(), newUser1);
-        usersMap.put(newUser2.getUserId(), newUser2);
-    }
+//    static {
+//        User newUser0 = new User(6, "Morgan", "m@mail.com", "1234");
+//        User newUser1 = new User(7, "Cathal", "c@mail.com", "5555");
+//        User newUser2 = new User(8, "Kevin", "k@mail.com", "11111");
+//        usersMap.put(newUser0.getUserId(), newUser0);
+//        usersMap.put(newUser1.getUserId(), newUser1);
+//        usersMap.put(newUser2.getUserId(), newUser2);
+//    }
     /**
      * Get all users
      *
      * @return
      */
     public static List<User> getUsers() {
-        return new ArrayList<User>(usersMap.values());
+        return new ArrayList<>(usersMap.values());
     }
 
     /**

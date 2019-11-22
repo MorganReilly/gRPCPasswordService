@@ -6,8 +6,6 @@ import ie.gmit.ds.api.UserLogin;
 import ie.gmit.ds.client.UserClient;
 import ie.gmit.ds.db.UserDB;
 
-
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Set;
@@ -15,13 +13,7 @@ import java.util.logging.Logger;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;

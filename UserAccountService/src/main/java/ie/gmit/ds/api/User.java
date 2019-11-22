@@ -49,8 +49,8 @@ public class User {
 
     /**
      * 4 param constructor
-     *
-     * Using for testing
+     * <p>
+     * Use for sending
      */
     public User(int userId, String userName, String email, String password) {
         this.userId = userId;
@@ -60,7 +60,9 @@ public class User {
     }
 
     /**
-     * 5 Param constructor -- Use for storing ?
+     * 5 Param constructor
+     * <p>
+     * Use for storing
      *
      * @param userId
      * @param userName
