@@ -22,7 +22,7 @@ Distributed Systems project 2019.  The purpose is to build a distributed user ac
 
 ### To Run User Service -- Part 2
 
-* Download .jar from release version 1.0
+* Download .jar from release version 2
 * $ cd path/to/jar/file
 * $ java -jar DropWizardExample-1.0-SNAPSHOT.jar server userAccountServiceConfiguration.yml 
 
